@@ -1,0 +1,15 @@
+.top_text{
+    position: absolute;
+    top: 0%;
+}
+
+.top_text h1{
+    font-size: 80;
+}
+.top_text h2{
+    font-size: 40;
+}
+
+body{
+    background-color: rgb(175, 146, 108);
+}
