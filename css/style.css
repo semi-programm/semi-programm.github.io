@@ -5,6 +5,9 @@
     font-weight: normal;
     font-style: normal;
 }
+:root{
+    --themeColor: rgb(74, 83, 76);
+}
 
 /* =======================================================
 *
@@ -50,7 +53,7 @@ body {
 }
 
 a {
-    color: #FF9000;
+    color: var(--themeColor);
     -webkit-transition: 0.5s;
     -o-transition: 0.5s;
     transition: 0.5s;
@@ -59,7 +62,7 @@ a {
 a:hover,
 a:active,
 a:focus {
-    color: #FF9000;
+    color: var(--themeColor);
     outline: none;
     text-decoration: none;
 }
@@ -83,17 +86,17 @@ figure {
 
 ::-webkit-selection {
     color: #fff;
-    background: #FF9000;
+    background: var(--themeColor);
 }
 
 ::-moz-selection {
     color: #fff;
-    background: #FF9000;
+    background: var(--themeColor);
 }
 
 ::selection {
     color: #fff;
-    background: #FF9000;
+    background: var(--themeColor);
 }
 
 #fh5co-header,
@@ -113,7 +116,7 @@ figure {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 144, 0, 0.9);
+    background: var(--themeColor);
 }
 
 #fh5co-header .display-t,
@@ -255,7 +258,7 @@ figure {
 }
 
 #fh5co-features {
-    background: #FF9000;
+    background: var(--themeColor);
 }
 
 #fh5co-features h2 {
@@ -296,7 +299,7 @@ figure {
     display: table-cell;
     vertical-align: middle;
     height: 100px;
-    color: #FF9000 !important;
+    color: var(--themeColor) !important;
 }
 
 #fh5co-features .feature-left .feature-copy {
@@ -354,7 +357,7 @@ figure {
 
 .fh5co-bg-dark {
     background: #2F3C4F;
-    background: #FF9000;
+    background: var(--themeColor);
 }
 
 .fh5co-bg-dark .fh5co-heading h2 {
@@ -419,7 +422,7 @@ figure {
     display: inline-block;
     zoom: 1;
     *display: inline;
-    color: #FF9000;
+    color: var(--themeColor);
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -461,7 +464,7 @@ figure {
 }
 
 #fh5co-about .fh5co-social-icons li a:hover {
-    background: #FF9000;
+    background: var(--themeColor);
 }
 
 .fh5co-heading {
@@ -612,7 +615,7 @@ figure {
     top: 40px;
     left: 50%;
     margin-left: -21px;
-    background-color: #FF9000;
+    background-color: var(--themeColor);
     z-index: 100;
     display: table;
     -webkit-border-radius: 50%;
@@ -916,7 +919,7 @@ figure {
     height: 54px;
     border: none !important;
     background: #fff;
-    color: #FF9000;
+    color: var(--themeColor);
     font-size: 16px;
     text-transform: uppercase;
     font-weight: 400;
@@ -1197,49 +1200,6 @@ input[type="text"] {
     }
 }
 
-.gototop {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    -webkit-transition: 0.5s;
-    -o-transition: 0.5s;
-    transition: 0.5s;
-}
-
-.gototop.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.gototop a {
-    width: 50px;
-    height: 50px;
-    display: table;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    text-align: center;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    border-radius: 50%;
-}
-
-.gototop a i {
-    height: 50px;
-    display: table-cell;
-    vertical-align: middle;
-}
-
-.gototop a:hover,
-.gototop a:active,
-.gototop a:focus {
-    text-decoration: none;
-    outline: none;
-}
-
 .btn {
     margin-right: 4px;
     margin-bottom: 4px;
@@ -1272,9 +1232,9 @@ input[type="text"] {
 }
 
 .btn-primary {
-    background: #FF9000;
+    background: var(--themeColor);
     color: #fff;
-    border: 2px solid #FF9000;
+    border: 2px solid var(--themeColor);
 }
 
 .btn-primary:hover,
@@ -1286,14 +1246,14 @@ input[type="text"] {
 
 .btn-primary.btn-outline {
     background: transparent;
-    color: #FF9000;
-    border: 2px solid #FF9000;
+    color: var(--themeColor);
+    border: 2px solid var(--themeColor);
 }
 
 .btn-primary.btn-outline:hover,
 .btn-primary.btn-outline:focus,
 .btn-primary.btn-outline:active {
-    background: #FF9000;
+    background: var(--themeColor);
     color: #fff;
 }
 
@@ -1459,7 +1419,7 @@ input[type="text"] {
 .form-control:focus {
     outline: none;
     box-shadow: none;
-    border-color: #FF9000;
+    border-color: var(--themeColor);
 }
 
 .row-pb-md {
