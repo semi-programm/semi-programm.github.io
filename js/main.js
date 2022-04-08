@@ -120,7 +120,26 @@
         parallax();
         // pieChart();
         skillsWayPoint();
+        setToday();
     });
 
+    /**
+     * 今年をセットする
+     */
+    let setToday = function () {
+        let date = new Date().getFullYear();
+        $('.today').text(date);
+    }
+
+    /**
+     * clickするとバウンスする
+     */
+    $('#profile-logo').on('click', function () {
+        $(this).removeClass('animate__animated animate__flip animate__repeat-2');
+        $(this).addClass('animate__animated animate__rubberBand').delay(1000).queue(function (next) {
+            $(this).removeClass('animate__animated animate__flip animate__repeat-2 animate__animated animate__rubberBand');
+            next();
+        });
+    });
 
 }());
