@@ -246,6 +246,7 @@ figure {
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 #fh5co-header .display-tc .fh5co-social-icons li a,
