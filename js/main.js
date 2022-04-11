@@ -40,89 +40,68 @@
         $(window).stellar();
     };
 
-    var contentWayPoint = function () {
-        var i = 0;
-        $('.animate-box').waypoint(function (direction) {
+    // var contentWayPoint = function () {
+    //     $('.animate-box').waypoint(function (direction) {
+    //         if (direction === 'down' && !$(this.element).hasClass('animated-fast')) {
+    //             $(this.element).addClass('item-animate');
+    //             setTimeout(function () {
+    //                 $('body .animate-box .item-animate').each(function (k) {
+    //                     var el = $(this);
+    //                     setTimeout(function () {
+    //                         var effect = el.data('animate-effect');
+    //                         if (effect === 'fadeIn') {
+    //                             el.addClass('animate__animated animate__fadeIn animated-fast');
+    //                         }
+    //                         if (effect === 'fadeInLeft') {
+    //                             el.addClass('animate__animated animate__fadeInLeft animated-fast');
+    //                         }
+    //                         if (effect === 'fadeInRight') {
+    //                             el.addClass('animate__animated animate__fadeInRight animated-fast');
+    //                         }
+    //                         el.addClass('animate__animated animate__fadeInUp animated-fast');
 
-            if (direction === 'down' && !$(this.element).hasClass('animated-fast')) {
-
-                i++;
-
-                $(this.element).addClass('item-animate');
-                setTimeout(function () {
-
-                    $('body .animate-box.item-animate').each(function (k) {
-                        var el = $(this);
-                        setTimeout(function () {
-                            var effect = el.data('animate-effect');
-                            if (effect === 'fadeIn') {
-                                el.addClass('fadeIn animated-fast');
-                            } else if (effect === 'fadeInLeft') {
-                                el.addClass('fadeInLeft animated-fast');
-                            } else if (effect === 'fadeInRight') {
-                                el.addClass('fadeInRight animated-fast');
-                            } else {
-                                el.addClass('fadeInUp animated-fast');
-                            }
-
-                            el.removeClass('item-animate');
-                        }, k * 100, 'easeInOutExpo');
-                    });
-
-                }, 50);
-
-            }
-
-        }, {
-            offset: '85%'
-        });
-    };
+    //                         el.removeClass('item-animate');
+    //                     }, k * 100, 'easeInOutExpo');
+    //                 });
+    //             }, 50);
+    //         }
+    //     }, {
+    //         offset: '85%'
+    //     });
+    // };
 
 
-    var pieChart = function () {
-        $('.chart').easyPieChart({
-            scaleColor: false,
-            lineWidth: 4,
-            lineCap: 'butt',
-            barColor: 'green',
-            trackColor: "#f5f5f5",
-            size: 160,
-            animate: 1000
-        });
-    };
+    // var pieChart = function () {
+    //     $('.chart').easyPieChart({
+    //         scaleColor: false,
+    //         lineWidth: 4,
+    //         lineCap: 'butt',
+    //         barColor: 'green',
+    //         trackColor: "#f5f5f5",
+    //         size: 160,
+    //         animate: 1000
+    //     });
+    // };
 
-    var skillsWayPoint = function () {
-        if ($('#fh5co-skills').length > 0) {
-            $('#fh5co-skills').waypoint(function (direction) {
+    // var skillsWayPoint = function () {
+    //     if ($('#fh5co-skills').length > 0) {
+    //         $('#fh5co-skills').waypoint(function (direction) {
 
-                if (direction === 'down' && !$(this.element).hasClass('animated')) {
-                    setTimeout(pieChart, 400);
-                    $(this.element).addClass('animated');
-                }
-            }, {
-                offset: '90%'
-            });
-        }
-
-    };
+    //             if (direction === 'down' && !$(this.element).hasClass('animated')) {
+    //                 setTimeout(pieChart, 400);
+    //                 $(this.element).addClass('animated');
+    //             }
+    //         }, {
+    //             offset: '90%'
+    //         });
+    //     }
+    // };
 
 
     // Loading page
     var loaderPage = function () {
         $(".fh5co-loader").fadeOut("slow");
     };
-
-
-    $(function () {
-        contentWayPoint();
-        loaderPage();
-        fullHeight();
-        parallax();
-        // pieChart();
-        skillsWayPoint();
-        setToday();
-    });
-
     /**
      * 今年をセットする
      */
@@ -130,7 +109,6 @@
         let date = new Date().getFullYear();
         $('.today').text(date);
     }
-
     /**
      * clickするとバウンスする
      */
@@ -141,5 +119,36 @@
             next();
         });
     });
+
+    // let inview = function () {
+    //     $('.animate-box').on('inview', function (event, isInView) {
+    //         if (isInView) {
+    //             //表示領域に入った時
+    //             $(this).addClass('animate__animated animate__fadeInUp');
+    //         } else {
+    //             //表示領域から出た時
+    //             $(this).removeClass('animate__animated animate__fadeInUp');
+    //             $(this).addClass('animate__animated animate__fadeOutUp');
+    //             $(this).css('opacity', 0); //非表示にしておく
+    //         }
+    //     });
+    // };
+
+    let locomotive = function () {
+        let scroll = new LocomotiveScroll();
+     }
+
+
+    $(function () {
+        // contentWayPoint();
+        loaderPage();
+        fullHeight();
+        parallax();
+        // pieChart();
+        // skillsWayPoint();
+        setToday();
+        // inview();
+    });
+
 
 }());

@@ -328,7 +328,7 @@ figure {
 }
 
 #fh5co-about,
-#fh5co-resume,
+#fh5co-history,
 #fh5co-skills,
 #fh5co-started,
 #fh5co-work,
@@ -342,7 +342,7 @@ figure {
 @media screen and (max-width: 768px) {
 
     #fh5co-about,
-    #fh5co-resume,
+    #fh5co-history,
     #fh5co-skills,
     #fh5co-started,
     #fh5co-work,
@@ -1276,10 +1276,6 @@ input[type="text"] {
     height: 100%;
     z-index: 9999;
     background: url(../images/loader.gif) center no-repeat #fff;
-}
-
-.js .animate-box {
-    opacity: 0;
 }
 
 /*# sourceMappingURL=style.css.map */
