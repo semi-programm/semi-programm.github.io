@@ -3,37 +3,37 @@
 
     'use strict';
 
-    var isMobile = {
-        Android: function () {
-            return navigator.userAgent.match(/Android/i);
-        },
-        BlackBerry: function () {
-            return navigator.userAgent.match(/BlackBerry/i);
-        },
-        iOS: function () {
-            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-        },
-        Opera: function () {
-            return navigator.userAgent.match(/Opera Mini/i);
-        },
-        Windows: function () {
-            return navigator.userAgent.match(/IEMobile/i);
-        },
-        any: function () {
-            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-        }
-    };
+    // var isMobile = {
+    //     Android: function () {
+    //         return navigator.userAgent.match(/Android/i);
+    //     },
+    //     BlackBerry: function () {
+    //         return navigator.userAgent.match(/BlackBerry/i);
+    //     },
+    //     iOS: function () {
+    //         return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    //     },
+    //     Opera: function () {
+    //         return navigator.userAgent.match(/Opera Mini/i);
+    //     },
+    //     Windows: function () {
+    //         return navigator.userAgent.match(/IEMobile/i);
+    //     },
+    //     any: function () {
+    //         return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    //     }
+    // };
 
 
-    var fullHeight = function () {
+    // var fullHeight = function () {
 
-        if (!isMobile.any()) {
-            $('.js-fullheight').css('height', $(window).height());
-            $(window).resize(function () {
-                $('.js-fullheight').css('height', $(window).height());
-            });
-        }
-    };
+    //     if (!isMobile.any()) {
+    //         $('.js-fullheight').css('height', $(window).height());
+    //         $(window).resize(function () {
+    //             $('.js-fullheight').css('height', $(window).height());
+    //         });
+    //     }
+    // };
 
     // Parallax
     var parallax = function () {
@@ -69,6 +69,23 @@
     //         offset: '85%'
     //     });
     // };
+    var contentWayPoint = function () {
+        $('.animate-box').css('opacity', 0); //非表示にしておく
+        // scroll down
+        $('.animate-box').waypoint(function (direction) {
+            let target = $(this.element);
+            if (direction === 'down') {
+                target.css('opacity', 1);
+                target.addClass('animate__animated animate__fadeInUp animate__faster');
+            }
+            if (direction === 'up') {
+                $('.animate-box').css('opacity', 0);
+                target.removeClass('animate__animated animate__fadeInUp animate__faster');
+            }
+        }, {
+            offset: '90%'
+        });
+    };
 
 
     // var pieChart = function () {
@@ -121,6 +138,7 @@
     });
 
     // let inview = function () {
+    //     $('.animate-box').css('opacity', 0); //非表示にしておく
     //     $('.animate-box').on('inview', function (event, isInView) {
     //         if (isInView) {
     //             //表示領域に入った時
@@ -128,21 +146,17 @@
     //         } else {
     //             //表示領域から出た時
     //             $(this).removeClass('animate__animated animate__fadeInUp');
-    //             $(this).addClass('animate__animated animate__fadeOutUp');
+    //             // $(this).addClass('animate__animated animate__fadeOutUp');
     //             $(this).css('opacity', 0); //非表示にしておく
     //         }
     //     });
     // };
 
-    let locomotive = function () {
-        let scroll = new LocomotiveScroll();
-     }
-
 
     $(function () {
-        // contentWayPoint();
+        contentWayPoint();
         loaderPage();
-        fullHeight();
+        // fullHeight();
         parallax();
         // pieChart();
         // skillsWayPoint();
