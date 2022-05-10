@@ -51,9 +51,96 @@ $('#profile-logo').on('click', function () {
     });
 });
 
+/**
+ * グラフ系
+ */
+function graph() {
+    const font = 'Walter Turncoat';
+    const options = {
+        // axisFontSize: '1.2rem', //軸のラベルのフォントサイズ。デフォルト：'1rem'。
+        axisRoughness: 1, // x軸とy軸の粗さ。デフォルト：0.5。
+        axisStrokeWidth: 2, // x軸とy軸のストローク幅。 デフォルト： 0.5。
+        bowing: 1, //チャートのお辞儀。 デフォルト： 0。
+        // color: 'skyblue', //各バーの色。 デフォルト： 'skyblue'。
+        fillStyle: 'zigzag', //バー塗りつぶしスタイル。 上記のfillStylesのいずれかである必要があります。
+        fillWeight: 1, //内側のパスの色の重み。 デフォルト： 0.5。
+        font: font, //使用するフォントファミリ。 を使用するか、 を使用するか、 0 またはgaeguを使用することができます。 またはそれを何か他のものに与えます。 デフォルト：。 Gaegu1indie flowerIndie FlowerGaegu
+        // highlight[文字列]: 1, //ホバーした各バーの色。 デフォルト： 'coral'。
+        // innerStrokeWidth: 1, //バー内のパスのストローク幅。 デフォルト： 1。
+        // interactive: true, //チャートがインタラクティブかどうか。 デフォルト： true。
+        // labelFontSize: '1rem', //軸のラベルのフォントサイズ。 デフォルト： '1rem'。
+        // margin: {
+        //     top: 50,
+        //     right: 20,
+        //     bottom: 70,
+        //     left: 90
+        // }, //マージンオブジェクト。 デフォルト： {top: 50, right: 20, bottom: 70, left: 100}
+        padding: 0.3, //バー間のパディング。 デフォルト： 0.1。
+        roughness: 2, //チャートの粗さレベル。 デフォルト： 1。
+        // simplification: 5, //グラフの簡略化。 デフォルト0 .2。
+        stroke: 'white', //バーのストロークの色。 デフォルト： black。
+        strokeWidth: 1, //バーのストロークのサイズ。 デフォルト： 1。
+        title: 'Front End', //グラフのタイトル。 オプション。
+        titleFontSize: '1.6rem', //チャートタイトルのフォントサイズ。 デフォルト： '1rem'。
+        // tooltipFontSize: '1rem', //ツールチップのフォントサイズ。 デフォルト： '0.95rem'。
+        // xLabel[文字列]: 1, //x軸のラベル。
+        // yLabel[文字列]: 1, //y軸のラベル。
+    }
+    new roughViz.BarH({
+        element: '#front-end',
+        data: {
+            labels: ['HTML', 'CSS', 'JS', 'Jquery', 'TS', 'Vue', 'React', 'Angular'],
+            values: [3, 3, 3, 3, 3, 2, 3, 1]
+        },
+        ...options
+    })
+
+    new roughViz.BarH({
+        element: '#back-end',
+        data: {
+            labels: ['PHP', 'Laravel', 'CakePHP', 'Ruby', 'Rails', 'C', 'C#', 'Python', 'VBA'],
+            values: [3, 3, 3, 1, 1, 1, 1, 1, 3]
+        },
+        ...options,
+        color: 'coral',
+        highlight: 'skyblue'
+    })
+
+    new roughViz.BarH({
+        element: '#infrastructure',
+        data: {
+            labels: ['MySQL', 'PostgreSQL', 'Bat', 'Apache', 'Nginx', 'AWS', 'Docker'],
+            values: [3, 3, 2, 3, 2, 2, 2]
+        },
+        ...options,
+        color: 'lightgreen',
+        highlight: 'skyblue'
+    })
+
+    // x軸の少数を削除
+    $("[class^='xAxis'] text").each(function (index, element) {
+        value = $(element).text();
+        if (!isInteger(value)) {
+            $(element).hide();
+        }
+        return element.value;
+    })
+
+    /**
+     * 整数チェック
+     * @param {number} val
+     * @returns
+     */
+    function isInteger(val) {
+        var pattern = /^\d*$/;
+        return pattern.test(val);
+    }
+}
+
 $(function () {
     contentWayPoint();
     loaderPage();
     parallax();
     setToday();
+    graph();
 });
