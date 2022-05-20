@@ -116,16 +116,12 @@ function graph() {
         color: 'lightgreen',
         highlight: 'skyblue'
     })
+}
 
-    // x軸の少数を削除
-    $("[class^='xAxis'] text").each(function (index, element) {
-        value = $(element).text();
-        if (!isInteger(value)) {
-            $(element).hide();
-        }
-        return element.value;
-    })
-
+/**
+ * roughVizのx軸の少数を削除
+ */
+function DeleteFloat() {
     /**
      * 整数チェック
      * @param {number} val
@@ -135,6 +131,16 @@ function graph() {
         var pattern = /^\d*$/;
         return pattern.test(val);
     }
+    // x軸の少数を削除
+    $("[class^='xAxis'] text").each(function (index, element) {
+        value = $(element).text();
+        if (!isInteger(value)) {
+            $(element).hide();
+        }
+        return element.value;
+    })
+
+
 }
 
 $(function () {
@@ -143,4 +149,5 @@ $(function () {
     parallax();
     setToday();
     graph();
+    DeleteFloat();
 });
