@@ -80,14 +80,15 @@ function graph() {
         // simplification: 5, //グラフの簡略化。 デフォルト0 .2。
         stroke: 'white', //バーのストロークの色。 デフォルト： black。
         strokeWidth: 1, //バーのストロークのサイズ。 デフォルト： 1。
-        title: 'Front End', //グラフのタイトル。 オプション。
+        // title: 'Front End', //グラフのタイトル。 オプション。
         titleFontSize: '1.6rem', //チャートタイトルのフォントサイズ。 デフォルト： '1rem'。
         // tooltipFontSize: '1rem', //ツールチップのフォントサイズ。 デフォルト： '0.95rem'。
         // xLabel[文字列]: 1, //x軸のラベル。
         // yLabel[文字列]: 1, //y軸のラベル。
     }
     new roughViz.BarH({
-        element: '#front-end',
+      element: '#front-end',
+      title: 'Front End',
         data: {
             labels: ['HTML', 'CSS', 'JS', 'Jquery', 'TS', 'Vue', 'React', 'Angular'],
             values: [3, 3, 3, 3, 3, 2, 3, 1]
@@ -96,10 +97,11 @@ function graph() {
     })
 
     new roughViz.BarH({
-        element: '#back-end',
+      element: '#back-end',
+      title: 'Back End',
         data: {
             labels: ['PHP', 'Laravel', 'CakePHP', 'Ruby', 'Rails', 'C', 'C#', 'Python', 'VBA'],
-            values: [3, 3, 3, 1, 1, 1, 1, 1, 3]
+            values: [3, 3, 3, 2, 2, 1, 1, 1, 3]
         },
         ...options,
         color: 'coral',
@@ -107,7 +109,8 @@ function graph() {
     })
 
     new roughViz.BarH({
-        element: '#infrastructure',
+      element: '#infrastructure',
+      title: 'Infrastructure',
         data: {
             labels: ['MySQL', 'PostgreSQL', 'Bat', 'Apache', 'Nginx', 'AWS', 'Docker'],
             values: [3, 3, 2, 3, 2, 2, 2]
