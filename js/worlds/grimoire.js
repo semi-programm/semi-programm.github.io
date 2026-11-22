@@ -4,7 +4,9 @@
 // - めくる紙は、細い短冊を少しずつ角度を変えてつないだもの。短冊ごとにページの写しを置くので、文字も紙と一緒に曲がる
 // - JS が動かないときや割り付けに失敗したときは、grimoire.css の元の作り（縦に読む本）のまま
 
-const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// スマホの「動きを減らす」設定に関係なく、常に全部動かす（サイトの方針として決めたこと）。
+// 設定に従わせるなら、ここを window.matchMedia("(prefers-reduced-motion: reduce)").matches に戻す
+const reduce = false;
 const fine = window.matchMedia("(pointer: fine)").matches;
 const html = document.documentElement;
 const body = document.body;

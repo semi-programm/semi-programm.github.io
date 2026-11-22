@@ -245,11 +245,6 @@ h1::first-letter { color: var(--rubric); }
 .colophon dd { margin: 0; font-family: var(--serif-en); font-size: 16px; color: var(--ink-2); }
 .colophon .copy { margin: 0; font-family: var(--serif-en); letter-spacing: .1em; }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .caption .pt.show { animation: none; }
-}
-
 /* ---------- スマホ・狭い画面: 1ページの本。紋章は最初大きく、そのあと右下の印になる ---------- */
 @media (max-width: 979px) {
   .book { display: block; margin: 0; box-shadow: none; }
@@ -507,9 +502,6 @@ html.paged .frame {
   0%, 100% { translate: 0 0; rotate: 0deg; }
   30% { translate: 3px 1px; rotate: 1.6deg; }
   65% { translate: -3px -1px; rotate: -1.8deg; }
-}
-@media (prefers-reduced-motion: reduce) {
-  html.paged .plate, html.paged .frame, html.paged .page-right::before { animation: none; }
 }
 html.paged .frame::after, html.paged .fc, html.paged .caption, html.paged .plate .hint { display: none; }
 html.paged #sigil { cursor: pointer; filter: drop-shadow(0 8px 16px rgba(0, 0, 0, .55)) drop-shadow(0 0 14px rgba(196, 154, 69, .22)); }

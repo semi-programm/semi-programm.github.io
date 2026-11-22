@@ -146,7 +146,6 @@ html.leaving body { opacity: 0; transition: opacity .35s ease; }
   .worlds { top: auto; right: auto; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); left: calc(14px + env(safe-area-inset-left, 0px)); }
   .worlds button { padding: 5px 9px; letter-spacing: .04em; }
 }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 /* ==========================================================
    ひぐらしの景色（night-scenery.js が作り、night.js が動かす）
@@ -330,8 +329,4 @@ html {
   .hg-furin { right: 9%; width: 34px; height: 108px; }
   /* 下の世界の切り替えは縁側の床に載る。後ろの文字が透けないよう、濃くする */
   .worlds { background: rgba(10, 15, 38, .9); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hg-furin-swing, .tanzaku, .crossing, .blink-a, .blink-b, .shimmer, .isaribi .lamp, .beam, .bug, .chochin { animation: none; }
-  .train { animation: none; transform: translateX(1050px); }
 }

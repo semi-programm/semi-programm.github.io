@@ -5,7 +5,9 @@ import DATA from "./sigil-data.js";
 
 const canvas = document.getElementById("sigil");
 const plate = document.querySelector(".plate");
-const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// スマホの「動きを減らす」設定に関係なく、常に全部動かす（サイトの方針として決めたこと）。
+// 設定に従わせるなら、ここを window.matchMedia("(prefers-reduced-motion: reduce)").matches に戻す
+const reduce = false;
 
 let renderer;
 try {

@@ -1,7 +1,9 @@
 // 光の粒でできたセミ（ひぐらしで使う）。ロゴの骨組みに沿って粒を置き、集めたりほどいたりする
 import DATA from "./sigil-data.js";
 
-export const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// スマホの「動きを減らす」設定に関係なく、常に全部動かす（サイトの方針として決めたこと）。
+// 設定に従わせるなら、ここを window.matchMedia("(prefers-reduced-motion: reduce)").matches に戻す
+export const reduce = false;
 
 function inside(poly, x, y) {
   let c = false;
