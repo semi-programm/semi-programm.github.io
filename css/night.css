@@ -1,4 +1,5 @@
-/* 夏の夜。藍色の空に文字を一段だけ置き、光はセミと蛍だけに使う。中身の HTML は魔導書と共通 */
+/* ひぐらし（夏の夜）。縁側から眺める、夕暮れから夜の田舎。中身の HTML は魔導書と共通
+   空と景色は night-scenery.js が作り、night.js がスクロールに合わせて html の --t（0 = 夕暮れ、1 = 夜）を書く */
 :root {
   color-scheme: dark;
   --night: #070b1e;
@@ -43,8 +44,8 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   padding-block: 0 18vh;
 }
 .page-left { max-width: 36em; margin-left: clamp(0px, 7vw, 128px); }
-/* 散った粒の上でも文字が沈まないよう、夜の色でうっすら縁取る */
-.page-left p, .page-left li, .page-left dd, .page-left dt, .page-left h3 { text-shadow: 0 0 10px rgba(7, 11, 30, .95), 0 0 2px rgba(7, 11, 30, .9); }
+/* 散った粒や夕焼けの上でも文字が沈まないよう、夜の色でうっすら縁取る */
+.page-left p, .page-left li, .page-left dd, .page-left dt, .page-left h3, .page-left h2, .toc a, .imprint, .cap { text-shadow: 0 0 10px rgba(7, 11, 30, .95), 0 0 2px rgba(7, 11, 30, .9); }
 
 /* 表紙 */
 .title-page { padding-block: 22vh 8vh; }
@@ -146,3 +147,191 @@ html.leaving body { opacity: 0; transition: opacity .35s ease; }
   .worlds button { padding: 5px 9px; letter-spacing: .04em; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* ==========================================================
+   ひぐらしの景色（night-scenery.js が作り、night.js が動かす）
+   重なり: 空 → 花火 → 景色（5つ。章に合わせて重ねながら入れ替わる）→ 本文の後ろの覆い → 蛍とセミ → 縁側（景色 0 だけ）
+   html の --t: 0 = 夕焼け、1 = 夜（「便り」で夜になりきる）。--on: 灯りのつき具合
+   ========================================================== */
+html {
+  --t: 0;
+  --mix: calc(var(--t) * 100%);
+  --on: clamp(0, (var(--t) - .18) * 2.4, 1);
+}
+.hg-sky, .hg-fireworks, .hg-land, .hg-near { position: fixed; z-index: 0; pointer-events: none; }
+
+/* 空: 夕焼け → 青い黄昏 → 夜。夕焼けの明るい帯は景色の山の端の後ろに来る */
+.hg-sky {
+  inset: 0;
+  background: linear-gradient(to bottom, #1d2352 0%, #343a75 24%, #6a4f88 42%, #b0688a 54%, #e38f70 61%, #f4b979 66%, #f7d396 70%, #f0bd84 100%);
+}
+.hg-sky-blue, .hg-sky-night { position: absolute; inset: 0; }
+.hg-sky-blue {
+  opacity: clamp(0, (var(--t) - .16) / .4, 1);
+  background: linear-gradient(to bottom, #121a44 0%, #1f2a62 30%, #36407e 50%, #5d5a96 62%, #8a76a8 68%, #6d6596 100%);
+}
+.hg-sky-night {
+  opacity: clamp(0, (var(--t) - .6) / .38, 1);
+  background:
+    radial-gradient(ellipse 60% 40% at 86% 4%, rgba(210, 220, 255, .13), transparent 70%),
+    linear-gradient(#060918 0%, #070b1e 40%, #0f1735 70%, #131b3f 100%);
+}
+.hg-fireworks { inset: 0; width: 100%; height: 100%; }
+
+/* 景色。画面の下 44% */
+.hg-land { left: 0; right: 0; bottom: 0; height: 44vh; }
+.hg-scene { position: absolute; inset: 0; opacity: 0; visibility: hidden; }
+.hg-scene svg { position: absolute; bottom: 0; height: 100%; overflow: visible; }
+.hg-scene .hg-mtn, .hg-scene .hg-paddy, .hg-scene .hg-wide { left: 0; width: 100%; }
+.hg-scene .hg-poles { left: 0; width: auto; }
+.hg-scene .hg-shrine { right: 0; width: auto; }
+.hg-scene .hg-wide { overflow: hidden; }
+
+/* 景色の色（夕焼けの色と夜の色を --t で混ぜる） */
+.mtn-far { fill: color-mix(in oklab, #8a6a98, #18213f var(--mix)); }
+.mtn-near { fill: color-mix(in oklab, #573f70, #0f1631 var(--mix)); }
+.paddy-base { fill: color-mix(in oklab, #2b2142, #080c1e var(--mix)); }
+.water-top { stop-color: color-mix(in oklab, #d88d8c, #1d2756 var(--mix)); }
+.water-mid { stop-color: color-mix(in oklab, #7a5a82, #0e1534 var(--mix)); }
+.water-bottom { stop-color: color-mix(in oklab, #2a2040, #070b1c var(--mix)); }
+.sea-top { stop-color: color-mix(in oklab, #e3a07e, #1c2754 var(--mix)); }
+.sea-mid { stop-color: color-mix(in oklab, #7d5d86, #101838 var(--mix)); }
+.sea-bottom { stop-color: color-mix(in oklab, #2c2244, #070b1c var(--mix)); }
+.bank, .rail { fill: color-mix(in oklab, #241a35, #060918 var(--mix)); }
+.glint { fill: color-mix(in oklab, rgba(250, 200, 140, .32), rgba(150, 170, 230, .1) var(--mix)); }
+.path, .road { fill: color-mix(in oklab, #5a3f5e, #0e1430 var(--mix)); }
+.pole, .crossbuck, .boat, .sil-deep { fill: color-mix(in oklab, #1e1530, #04060f var(--mix)); }
+.wire { fill: none; stroke: color-mix(in oklab, #1e1530, #04060f var(--mix)); stroke-width: 1.3; vector-effect: non-scaling-stroke; }
+.cedar-far { fill: color-mix(in oklab, #3e2c56, #0c1331 var(--mix)); }
+.hill, .cedar, .ground, .grass, .breakwater { fill: color-mix(in oklab, #251a38, #070c20 var(--mix)); }
+.step { fill: color-mix(in oklab, rgba(210, 175, 160, .45), rgba(120, 130, 170, .16) var(--mix)); }
+.torii { fill: color-mix(in oklab, #7a2430, #2a0e1a var(--mix)); }
+.platform, .fence, .shelter-wall, .bench, .roof, .shop-wall, .stall-counter { fill: color-mix(in oklab, #3a2a48, #0b1026 var(--mix)); }
+.roof { fill: color-mix(in oklab, #2a1f3a, #070a1a var(--mix)); }
+.shop-wall { fill: color-mix(in oklab, #4a3540, #120f20 var(--mix)); }
+.sign-board { fill: color-mix(in oklab, #e9dcc0, #8d8aa0 var(--mix)); }
+.sign-text { fill: #2a2119; font-family: "Shippori Mincho B1", serif; font-weight: 800; }
+.train-body { fill: color-mix(in oklab, #e6d8bc, #5c6078 var(--mix)); }
+.train-stripe { fill: color-mix(in oklab, #3a8a6a, #1d4a3c var(--mix)); }
+.win { fill: #ffd892; }
+.lamp { fill: #fff3cc; }
+.lamp-shade { fill: color-mix(in oklab, #1e1530, #04060f var(--mix)); }
+.red-lamp { fill: #ff4a3a; }
+.lighthouse { fill: color-mix(in oklab, #d24a3c, #5a1c22 var(--mix)); }
+.lighthouse-band { fill: color-mix(in oklab, #f2e6d0, #6c6a80 var(--mix)); }
+.lantern-room { fill: color-mix(in oklab, #3a2a48, #0b1026 var(--mix)); }
+.stone { fill: color-mix(in oklab, #6a5a6c, #1a1d33 var(--mix)); }
+.post { fill: #c8343a; }
+.icebox { fill: color-mix(in oklab, #e8eef2, #8a93a8 var(--mix)); }
+.icebox-lid { fill: color-mix(in oklab, #3a7bd5, #253d70 var(--mix)); }
+.awning-a { fill: #c8343a; }
+.awning-b { fill: #f4ead6; }
+.awning, .stall-awning { filter: brightness(calc(1 - .45 * var(--t))); }
+.vend { fill: color-mix(in oklab, #d8dde6, #39405a var(--mix)); }
+.vend-slot { fill: #1e2233; }
+.shelf { fill: color-mix(in oklab, #8a5a3a, #5a3a2a var(--mix)); opacity: .55; }
+.shop-light, .stall-light { fill: #ffd28a; opacity: calc(.45 + .55 * var(--on)); }
+.noren { fill: #f4ead6; opacity: .9; }
+.chochin-cap { fill: #2a1a14; }
+
+/* 灯り: 暗くなるほど強く光る */
+.glow { opacity: calc(.1 + .9 * var(--on)); }
+.shop-spill, .stall-glow, .vend-glow { opacity: calc(.15 + .85 * var(--on)); }
+
+/* 動くもの */
+.train { animation: train 22s linear infinite; }
+@keyframes train {
+  0%, 6% { transform: translateX(1700px); animation-timing-function: cubic-bezier(.2, .5, .45, 1); }
+  20%, 36% { transform: translateX(1050px); animation-timing-function: cubic-bezier(.55, 0, .8, .5); }
+  60%, 100% { transform: translateX(-640px); }
+}
+.crossing { opacity: 0; animation: crossing 22s step-end infinite; }
+@keyframes crossing { 0% { opacity: 0; } 33% { opacity: 1; } 57% { opacity: 0; } }
+.blink-a { animation: blink .9s step-end infinite; }
+.blink-b { animation: blink .9s step-end infinite -.45s; }
+@keyframes blink { 0% { opacity: 1; } 50% { opacity: .08; } }
+.shimmer { fill: color-mix(in oklab, rgba(255, 214, 160, .55), rgba(170, 190, 255, .28) var(--mix)); animation: shimmer 4.2s ease-in-out infinite alternate; }
+@keyframes shimmer { from { opacity: .15; transform: translateX(0); } to { opacity: .9; transform: translateX(14px); } }
+.isaribi { opacity: calc(.2 + .8 * var(--on)); }
+.isaribi .lamp { animation: flicker 2.6s ease-in-out infinite alternate; }
+@keyframes flicker { 50% { opacity: .55; } }
+.beam-wrap { opacity: calc(.08 + .55 * var(--on)); }
+.beam { transform-box: view-box; transform-origin: 1300px 133px; animation: beam 9s linear infinite; }
+@keyframes beam {
+  0% { transform: scaleX(1); opacity: 1; }
+  25% { transform: scaleX(.04); opacity: .35; }
+  50% { transform: scaleX(-1.4); opacity: .9; }
+  75% { transform: scaleX(.04); opacity: .35; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+/* 虫: 自販機の光のまわりを回る（中心 1556, 330 のまわりを、半径 --r で） */
+.bug { fill: #fff6d8; transform-box: view-box; transform-origin: 1556px 330px; animation: bug 3s linear infinite; }
+@keyframes bug {
+  0% { transform: rotate(0deg) translateX(var(--r)); }
+  100% { transform: rotate(360deg) translateX(var(--r)); }
+}
+.chochin { animation: chochin 4.6s ease-in-out infinite alternate; }
+@keyframes chochin { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+.chochin-glow { opacity: calc(.35 + .65 * var(--on)); }
+
+/* 本文の後ろの覆い。景色のある下のほうだけ、本文の列（左）を夜の色で覆う。夜になるほど少し濃く */
+.hg-veil {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 160%;
+  background: linear-gradient(90deg, rgba(12, 10, 30, .78) 0, rgba(12, 10, 30, .7) min(52vw, 760px), rgba(12, 10, 30, 0) min(66vw, 960px));
+  -webkit-mask: linear-gradient(to bottom, transparent 0, #000 42%);
+  mask: linear-gradient(to bottom, transparent 0, #000 42%);
+  opacity: calc(.78 + .22 * var(--t));
+}
+
+/* 手前（縁側）。蛍より手前。最初の景色だけ（night.js が opacity を書く） */
+.hg-near { inset: 0; --eave: clamp(26px, 4.5vh, 44px); }
+.hg-eave {
+  position: absolute; top: 0; left: 0; right: 0; height: var(--eave);
+  background: linear-gradient(#0b0810, color-mix(in oklab, #1d1526, #05060c var(--mix)));
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
+}
+.hg-eave::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 9px;
+  background: repeating-linear-gradient(90deg, color-mix(in oklab, #22182c, #05060c var(--mix)) 0 12px, transparent 12px 46px);
+}
+.hg-pillar {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 26px;
+  background: linear-gradient(90deg, color-mix(in oklab, #140e18, #04050b var(--mix)), color-mix(in oklab, #2c1e2c, #080a14 var(--mix)) 72%, rgba(246, 190, 124, calc(.28 * (1 - var(--t)))));
+}
+.hg-floor {
+  position: absolute; left: 0; right: 0; bottom: 0; height: clamp(34px, 6.5vh, 64px);
+  background:
+    linear-gradient(to bottom, rgba(246, 190, 124, calc(.42 * (1 - var(--t)) + .06)) 0 2px, transparent 2px),
+    repeating-linear-gradient(90deg, transparent 0 230px, rgba(0, 0, 0, .35) 230px 232px),
+    linear-gradient(to bottom, color-mix(in oklab, #3a2630, #0b0c18 var(--mix)), color-mix(in oklab, #160e16, #04050b var(--mix)));
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, .4);
+}
+
+/* 風鈴: 軒から下がり、ゆっくり揺れる。スクロールすると night.js が少し大きく揺らす（--kick） */
+.hg-furin { position: absolute; top: var(--eave); right: 12%; width: 44px; height: 140px; }
+.hg-furin-swing { width: 100%; height: 100%; transform-origin: 50% 0; animation: furin 3.8s ease-in-out infinite alternate; rotate: var(--kick, 0deg); }
+.hg-furin svg { width: 100%; height: 100%; overflow: visible; }
+.tanzaku { transform-box: view-box; transform-origin: 30px 96px; animation: tanzaku 2.6s ease-in-out infinite alternate; }
+@keyframes furin { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+@keyframes tanzaku { from { transform: rotate(-7deg); } to { transform: rotate(8deg); } }
+.furin-string { stroke: rgba(225, 212, 200, .6); stroke-width: .8; }
+.furin-glass { fill: rgba(225, 238, 255, .24); stroke: rgba(255, 255, 255, .6); stroke-width: .8; }
+.furin-paint { fill: #c8343a; opacity: .85; }
+.furin-shine { fill: none; stroke: rgba(255, 255, 255, .85); stroke-width: 1.2; stroke-linecap: round; }
+.tanzaku rect { fill: color-mix(in oklab, #efe3c4, #b9c2dc var(--mix)); opacity: .92; }
+
+/* スマホ: 景色は画面の下 40%。横長の景色は右側（見どころ）が見える。柱は置かない */
+@media (max-width: 699px) {
+  .hg-land { height: 40vh; }
+  .hg-scene .hg-poles { transform: scaleX(.6); transform-origin: 0 100%; }
+  .hg-scene .hg-shrine { height: 70%; right: -150px; }
+  .hg-veil { background: rgba(12, 10, 30, .66); }
+  .hg-pillar { display: none; }
+  .hg-furin { right: 9%; width: 34px; height: 108px; }
+  /* 下の世界の切り替えは縁側の床に載る。後ろの文字が透けないよう、濃くする */
+  .worlds { background: rgba(10, 15, 38, .9); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hg-furin-swing, .tanzaku, .crossing, .blink-a, .blink-b, .shimmer, .isaribi .lamp, .beam, .bug, .chochin { animation: none; }
+  .train { animation: none; transform: translateX(1050px); }
+}

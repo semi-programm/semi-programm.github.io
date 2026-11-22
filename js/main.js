@@ -1,4 +1,4 @@
-// どの世界（魔導書・夏の夜・霧の森）を出すかは <head> の小さなスクリプトが決めて、html[data-world] に書いている
+// どの世界（魔導書・ひぐらし・霧の森）を出すかは <head> の小さなスクリプトが決めて、html[data-world] に書いている
 const WORLDS = ["grimoire", "night", "mist"];
 const world = WORLDS.includes(document.documentElement.dataset.world) ? document.documentElement.dataset.world : "grimoire";
 

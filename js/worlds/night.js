@@ -1,8 +1,67 @@
 import * as THREE from "three";
 import { makeSigilPoints, makeAmbient, sceneState, placement, reduce } from "../particles.js";
+import { buildScenery, makeFireworks } from "./night-scenery.js";
 
-// ---- 夏の夜: 藍色の夜に蛍。蛍が集まってセミの形になる ----
+// ---- ひぐらし（夏の夜）: 縁側から眺める、夕暮れから夜の田舎。光の粒が集まってセミ（ヒグラシ）の形になる ----
 const canvas = document.getElementById("scene");
+
+// 景色を置く。空・花火・景色は粒より奥、縁側（軒・風鈴・柱・床）は粒より手前
+const scenery = buildScenery();
+canvas.before(scenery.sky, scenery.fireworks, scenery.far);
+canvas.after(scenery.near);
+const fireworks = reduce ? null : makeFireworks(scenery.fireworks);
+
+// 読み進めるにつれて、夕方の散歩のように景色が移り、日が暮れる。
+//   景色: 0 縁側と田んぼ（表紙〜強み） / 1 線路と無人駅（実績の前半） / 2 海辺と灯台（実績の後半）
+//         3 駄菓子屋と自販機（大事にしていること・技能） / 4 夏祭り（来歴〜）。「便り」で花火が上がる
+//   時間: 開いたとき夕焼け（--t = 0）、「便り」に入るところで夜（1）
+const root = document.documentElement;
+const smooth = (x) => { x = Math.min(1, Math.max(0, x)); return x * x * (3 - 2 * x); };
+let bounds = [];
+function measureBounds() {
+  const y = (el) => (el ? el.getBoundingClientRect().top + window.scrollY : Infinity);
+  const works = document.getElementById("works");
+  const entries = works ? works.querySelectorAll("article.entry") : [];
+  bounds = [
+    y(works),
+    y(entries[Math.floor(entries.length / 2)]),
+    y(document.getElementById("principles")),
+    y(document.getElementById("history")),
+    y(document.getElementById("contact")),
+  ];
+}
+// 景色の区切りごとの時間。実績の頭はまだ夕焼け、半ばで青い黄昏、大事にしていることで宵、来歴で夜、便りで夜になりきる
+const TIMES = [0, 0.14, 0.36, 0.56, 0.78, 1];
+let dusk = 0, sceneW = [1, 0, 0, 0, 0], fireW = 0;
+function timeOfDay() {
+  const vh = window.innerHeight;
+  // 読んでいる行（画面の上から 6 割）の位置で、時間と景色を決める
+  const line = window.scrollY + vh * 0.6, F = vh * 0.55;
+  const marks = [vh * 0.6, ...bounds];
+  let i = 0;
+  while (i < marks.length - 1 && line >= marks[i + 1]) i++;
+  const u = i >= marks.length - 1 ? 1 : (line - marks[i]) / Math.max(1, marks[i + 1] - marks[i]);
+  dusk = i >= marks.length - 1 ? 1 : Math.min(1, TIMES[i] + (TIMES[i + 1] - TIMES[i]) * Math.min(1, Math.max(0, u)));
+  root.style.setProperty("--t", dusk.toFixed(3));
+  // 境目をまたぐあいだ、2 つの景色を重ねて入れ替える
+  const ramp = (b) => smooth((line - (b - F / 2)) / F);
+  sceneW = scenery.scenes.map((el, i) => {
+    const w = (i === 0 ? 1 : ramp(bounds[i - 1])) * (i < 4 ? 1 - ramp(bounds[i]) : 1);
+    el.style.opacity = w.toFixed(3);
+    el.style.visibility = w > 0.001 ? "visible" : "hidden";
+    return w;
+  });
+  fireW = ramp(bounds[4]);
+  scenery.near.style.opacity = sceneW[0].toFixed(3);
+  scenery.near.style.visibility = sceneW[0] > 0.001 ? "visible" : "hidden";
+}
+measureBounds();
+timeOfDay();
+if (document.fonts) document.fonts.ready.then(() => { measureBounds(); timeOfDay(); });
+
+// 風鈴: スクロールの勢いで揺れ、ばねのように戻る
+const furin = scenery.near.querySelector(".hg-furin-swing");
+const bell = { angle: 0, vel: 0, lastY: window.scrollY };
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
 const PR = Math.min(window.devicePixelRatio, 1.75);
 renderer.setPixelRatio(PR);
@@ -39,6 +98,13 @@ const stars = makeAmbient(THREE, {
 });
 stars.uniforms.uAlpha.value = 0.7;
 [stars, fireflies, sigil].forEach((o) => { o.uniforms.uPR.value = PR; scene.add(o.points); });
+// 夕焼けのうちは星は見えず、蛍も少ない。宵から夜にかけて増える
+const lightUp = () => {
+  stars.uniforms.uAlpha.value = 0.03 + 0.67 * smooth((dusk - 0.45) / 0.5);
+  fireflies.uniforms.uAlpha.value = 0.2 + 0.8 * smooth(dusk / 0.7);
+};
+lightUp();
+window.addEventListener("scroll", () => { timeOfDay(); lightUp(); }, { passive: true });
 
 const pivot = new THREE.Object3D();
 pivot.rotation.order = "YXZ";
@@ -58,6 +124,9 @@ window.addEventListener("resize", () => {
   if (window.innerWidth === lastW) return;
   lastW = window.innerWidth;
   measure();
+  measureBounds();
+  timeOfDay();
+  lightUp();
 });
 
 const clock = new THREE.Clock();
@@ -87,6 +156,17 @@ function frame() {
   sigil.uniforms.uAlpha.value = 0.65 + form * 0.35;
   const scroll = window.scrollY / window.innerHeight;
   [fireflies, stars].forEach((o) => { o.uniforms.uTime.value = t; o.uniforms.uScroll.value = scroll * 0.12; });
+
+  if (!reduce) {
+    const dy = window.scrollY - bell.lastY;
+    bell.lastY = window.scrollY;
+    bell.vel += Math.max(-1.5, Math.min(1.5, dy * 0.015));
+    bell.vel -= bell.angle * 0.035;
+    bell.vel *= 0.94;
+    bell.angle = Math.max(-14, Math.min(14, bell.angle + bell.vel));
+    furin.style.setProperty("--kick", bell.angle.toFixed(2) + "deg");
+  }
+  if (fireworks) fireworks.step(dt, fireW);
 
   renderer.render(scene, camera);
   requestAnimationFrame(frame);

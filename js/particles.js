@@ -1,4 +1,4 @@
-// 光の粒でできたセミ（夏の夜・霧の森で使う）。ロゴの骨組みに沿って粒を置き、集めたりほどいたりする
+// 光の粒でできたセミ（ひぐらし・霧の森で使う）。ロゴの骨組みに沿って粒を置き、集めたりほどいたりする
 import DATA from "./sigil-data.js";
 
 export const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
