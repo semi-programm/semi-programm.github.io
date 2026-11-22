@@ -25,13 +25,7 @@
     <meta property="og:locale" content="ja_JP" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- 2つの世界の書体をまとめて指定する。実際に読み込まれるのは、選ばれた世界の CSS が使うものだけ -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Shippori+Mincho+B1:wght@400;600;800&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap"
-      rel="stylesheet"
-    />
+    <!-- 世界を決めるスクリプトは、書体の CSS より前に置く。後ろだと、書体の CSS が届くまで動かず、世界の CSS や JS を取りに行くのも遅れる -->
     <script>
       // 世界を決める。見た人が選んだものがあればそれ、なければ前回と違うものをくじで選ぶ。
       // 描く前に CSS を決めたいので、ここで同期的に書き出す
@@ -61,6 +55,37 @@
         }
       }
     </script>
+    <script>
+      // 選んだ世界で使う JS を、最初にまとめて取りに行かせる。
+      // ふつうは main.js → 世界の JS → 紋章の JS → three.js と、前のファイルが届くまで次を取りに行けない。
+      // three.js は大きいので、書体の読み込みを邪魔しないよう優先度を下げる
+      (function () {
+        var THREE = "https://cdn.jsdelivr.net/npm/three@0.160.0/";
+        var USE = {
+          grimoire: ["js/worlds/grimoire.js", "js/sigil.js", "js/sigil-data.js", THREE + "build/three.module.js", THREE + "examples/jsm/environments/RoomEnvironment.js"],
+          night: ["js/worlds/night.js", "js/worlds/night-scenery.js", "js/particles.js", "js/sigil-data.js", THREE + "build/three.module.js"],
+        }[document.documentElement.dataset.world] || [];
+        var pre = document.createElement("link");
+        pre.rel = "preconnect";
+        pre.href = "https://cdn.jsdelivr.net";
+        pre.crossOrigin = "anonymous";
+        document.head.appendChild(pre);
+        ["js/main.js"].concat(USE).forEach(function (src) {
+          var l = document.createElement("link");
+          l.rel = "modulepreload";
+          l.href = src;
+          if (src.indexOf(THREE) === 0) l.setAttribute("fetchpriority", "low");
+          document.head.appendChild(l);
+        });
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- 2つの世界の書体をまとめて指定する。実際に読み込まれるのは、選ばれた世界の CSS が使うものだけ -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Shippori+Mincho+B1:wght@400;600;800&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body data-chapter="0">
