@@ -1,5 +1,5 @@
-// どの世界（魔導書・ひぐらし・霧の森）を出すかは <head> の小さなスクリプトが決めて、html[data-world] に書いている
-const WORLDS = ["grimoire", "night", "mist"];
+// どの世界（魔導書・ひぐらし）を出すかは <head> の小さなスクリプトが決めて、html[data-world] に書いている
+const WORLDS = ["grimoire", "night"];
 const world = WORLDS.includes(document.documentElement.dataset.world) ? document.documentElement.dataset.world : "grimoire";
 
 // 経験年数は開始年月から数える。毎年 HTML を書き換えなくても古くならない
