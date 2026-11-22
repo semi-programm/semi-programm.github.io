@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- URL を貼ったときのカード画像（1200×630）の原稿。3つの世界のどれにも寄せない、専用のもの。tools/make_ogp.js が撮って images/ogp.png にする -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Zen+Kaku+Gothic+New:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f3efe6; --ink: #24211c; --mute: #7a7266; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    width: 1200px; height: 630px; overflow: hidden; background: var(--bg); color: var(--ink);
+    display: grid; grid-template-columns: 1fr 380px; align-items: center; padding: 0 96px 0 104px;
+  }
+  .imprint { margin: 0; font: 400 17px "Zen Kaku Gothic New", sans-serif; letter-spacing: .34em; text-transform: uppercase; color: var(--mute); }
+  h1 { margin: 22px 0 0; font: 500 200px/0.9 "Cormorant Garamond", serif; letter-spacing: -.01em; }
+  .logo {
+    width: 250px; height: 385px; justify-self: center; background: var(--ink);
+    -webkit-mask: url(../images/logo.png) center / contain no-repeat;
+    mask: url(../images/logo.png) center / contain no-repeat;
+  }
+</style>
+</head>
+<body>
+  <div>
+    <p class="imprint">semi-program · Freelance Web Engineer</p>
+    <h1>Mitz</h1>
+  </div>
+  <i class="logo"></i>
+</body>
+</html>

@@ -1,0 +1,532 @@
+:root {
+  --desk: #19140f;
+  --paper: #ede3cb;
+  --paper-hi: #f4ecd9;
+  --ink: #2a2119;
+  --ink-2: #5b4d3d;
+  --ink-3: #8a7a64;
+  --rule: #c4ae86;
+  --rubric: #8d2e22;
+  --gold: #a17a2c;
+  --serif-jp: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --serif-en: "Cormorant Garamond", "Shippori Mincho B1", serif;
+  /* 紙のざらつき（SVG のノイズ） */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .36 0 0 0 0 .27 0 0 0 0 .15 0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  /* 紙のむら（大きなまだら）としみ。タイルの大きさをずらして、繰り返しが目立たないようにする */
+  --mottle: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='640' height='640'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.006' numOctaves='5' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45 0 0 0 0 .3 0 0 0 0 .12 .18 0 0 0 -.04'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>");
+  --foxing: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='910' height='910'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.02' numOctaves='3' seed='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .32 0 0 0 0 .12 6 0 0 0 -4.3'/><feGaussianBlur stdDeviation='3'/></filter><rect width='100%' height='100%' filter='url(%23f)' opacity='.35'/></svg>");
+  --burn: rgba(118, 74, 26, .26);
+  /* 飾り。ロゴの羽の筋と同じ「曲線と点」で描く */
+  --corner: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23a17a2c'><path d='M2 118V38C2 17 17 2 38 2h80' stroke-width='1.4'/><path d='M9 118V45C9 25 25 9 45 9h73' stroke-width='.7'/><path d='M24 24c12 16 28 26 54 28M24 24c16 12 26 28 28 54' stroke-width='1.1'/><path d='M24 24c8 1 12-3 11-9' stroke-width='1.1'/><g fill='%23a17a2c' stroke='none'><circle cx='24' cy='24' r='3.4'/><circle cx='78' cy='52' r='2.6'/><circle cx='52' cy='78' r='2.6'/><circle cx='35' cy='15' r='1.8'/></g></svg>");
+  --headpiece: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 40' fill='none' stroke='%23a17a2c' stroke-width='1.2'><circle cx='300' cy='20' r='6'/><path d='M306 20c24 0 34-14 56-12 18 2 22 18 38 20 20 2 30-8 60-8h140M294 20c-24 0-34-14-56-12-18 2-22 18-38 20-20 2-30-8-60-8H0'/><path d='M470 25h130M130 25H0' stroke-width='.6'/><g fill='%23a17a2c' stroke='none'><circle cx='362' cy='8' r='2.8'/><circle cx='400' cy='28' r='2.8'/><circle cx='238' cy='8' r='2.8'/><circle cx='200' cy='28' r='2.8'/><circle cx='300' cy='20' r='2.2'/></g></svg>");
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--desk) var(--grain);
+  color: var(--ink);
+  font-family: var(--serif-jp);
+  font-size: 18.5px;
+  line-height: 2;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "palt" 0;
+}
+a { color: inherit; }
+h1, h2, h3 { font-weight: 800; margin: 0; }
+.nw { display: inline-block; }
+
+/* logo.png は線だけ不透明な画像。マスクにして好きな色で塗る */
+.logo {
+  display: inline-block;
+  background: currentColor;
+  -webkit-mask: url(../images/logo.png) center / contain no-repeat;
+  mask: url(../images/logo.png) center / contain no-repeat;
+}
+
+/* ---------- 本 ---------- */
+.book {
+  max-width: 1360px;
+  margin: 28px auto 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  box-shadow: 0 40px 90px rgba(0, 0, 0, .55), 0 0 0 1px rgba(0, 0, 0, .4);
+}
+.page { background-color: var(--paper); position: relative; }
+.page-left {
+  z-index: 1;
+  padding: 120px clamp(48px, 6.4vw, 112px) 160px;
+  background-image:
+    var(--grain), var(--foxing), var(--mottle),
+    linear-gradient(to bottom, var(--burn), transparent 220px),
+    linear-gradient(to top, var(--burn), transparent 220px),
+    linear-gradient(to right, var(--burn), transparent 7%, transparent 86%, rgba(95, 64, 26, .2));
+}
+.page-right {
+  z-index: 2;
+  background-image:
+    var(--grain), var(--foxing), var(--mottle),
+    linear-gradient(to bottom, var(--burn), transparent 220px),
+    linear-gradient(to top, var(--burn), transparent 220px),
+    linear-gradient(to right, rgba(95, 64, 26, .24), transparent 10%, transparent 93%, var(--burn));
+}
+.page-left, .page-right { background-size: 220px, 910px, 640px, 100% 100%, 100% 100%, 100% 100%; }
+
+/* 四隅の飾り */
+.corner { position: absolute; width: 92px; height: 92px; background: var(--corner) center / contain no-repeat; opacity: .85; pointer-events: none; }
+.corner.tl { top: 26px; left: 26px; }
+.corner.tr { top: 26px; right: 26px; transform: scaleX(-1); }
+.corner.bl { bottom: 26px; left: 26px; transform: scaleY(-1); }
+.corner.br { bottom: 26px; right: 26px; transform: scale(-1, -1); }
+/* 小口（紙の重なり） */
+.page-left::before, .page-right::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 5px;
+  background: repeating-linear-gradient(90deg, rgba(120, 95, 60, .25) 0 1px, transparent 1px 2.5px);
+}
+.page-left::before { left: 0; }
+.page-right::after { right: 0; }
+
+/* ---------- 右のページ: 図版 ---------- */
+.plate {
+  position: sticky; top: 0; height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 40px 32px;
+}
+.plate { perspective: 2600px; }
+.frame {
+  position: relative;
+  width: min(86%, 72vh);
+  aspect-ratio: 1;
+  border: 1px solid var(--rule);
+  box-shadow: inset 0 0 0 6px var(--paper), inset 0 0 0 7px rgba(196, 174, 134, .7);
+}
+.frame::after { /* 図版の下に落ちる淡い影。紋章が紙から浮いて見える */
+  content: ""; position: absolute; left: 22%; right: 22%; bottom: 9%; height: 7%;
+  background: radial-gradient(ellipse at center, rgba(70, 45, 15, .22), transparent 70%);
+  pointer-events: none;
+}
+.fc { position: absolute; z-index: 2; width: 54px; height: 54px; background: var(--corner) center / contain no-repeat; pointer-events: none; }
+.fc.tl { top: -10px; left: -10px; }
+.fc.tr { top: -10px; right: -10px; transform: scaleX(-1); }
+.fc.bl { bottom: -10px; left: -10px; transform: scaleY(-1); }
+.fc.br { bottom: -10px; right: -10px; transform: scale(-1, -1); }
+#sigil { position: relative; z-index: 1; display: block; width: 100%; height: 100%; cursor: grab; touch-action: pan-y; }
+#sigil:active { cursor: grabbing; }
+.fallback { display: none; position: absolute; inset: 14% 28%; color: var(--gold); }
+.no-webgl .fallback { display: block; }
+.no-webgl #sigil { display: none; }
+
+.caption { margin: 26px 0 0; text-align: center; line-height: 1.6; }
+.caption .pl { display: block; font-family: var(--serif-en); font-size: 13px; letter-spacing: .28em; color: var(--ink-3); }
+.caption .pt { display: block; font-size: 18px; letter-spacing: .14em; color: var(--ink-2); }
+.caption .pt.show { animation: caption-in .9s ease both; }
+@keyframes caption-in { from { opacity: 0; transform: translateY(4px); filter: blur(2px); } to { opacity: 1; transform: none; filter: none; } }
+.hint { margin: 10px 0 0; font-family: var(--serif-en); font-style: italic; font-size: 14px; color: var(--ink-3); }
+
+/* ---------- 表紙 ---------- */
+.title-page { padding-bottom: 72px; }
+.headpiece { width: min(420px, 100%); height: 28px; margin: 0 0 30px; background: var(--headpiece) left center / contain no-repeat; }
+.orn { width: 240px; height: 16px; margin: 0 auto 34px; background: var(--headpiece) center / contain no-repeat; opacity: .9; }
+.imprint { margin: 0 0 34px; font-family: var(--serif-en); font-size: 13px; letter-spacing: .32em; text-transform: uppercase; color: var(--ink-3); }
+h1 {
+  font-family: var(--serif-en); font-weight: 500;
+  font-size: clamp(104px, 11vw, 176px); line-height: .86; letter-spacing: -.015em;
+  margin: 0 0 40px; color: var(--ink);
+}
+h1::first-letter { color: var(--rubric); }
+.motto { margin: 0 0 22px; font-size: clamp(20px, 1.9vw, 25px); font-weight: 600; line-height: 1.85; letter-spacing: .06em; }
+.lead { margin: 0 0 40px; color: var(--ink-2); max-width: 30em; font-size: 19px; }
+.ledger { margin: 0 0 44px; max-width: 26em; border-top: 1px solid var(--rule); }
+.ledger div { display: flex; align-items: baseline; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+.ledger dt { color: var(--ink-2); font-size: 16px; }
+.ledger dd { margin: 0 0 0 auto; font-size: 16px; }
+.ledger b { font-family: var(--serif-en); font-weight: 600; font-size: 30px; line-height: 1; font-variant-numeric: oldstyle-nums; margin-right: 2px; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 14px; margin: 0; }
+.actions.center { justify-content: center; margin: 36px 0 0; }
+.btn {
+  display: inline-block; padding: 9px 24px; border: 1px solid var(--ink);
+  font-size: 15px; font-weight: 600; letter-spacing: .12em; text-decoration: none;
+  transition: background .3s, color .3s;
+}
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn.rubric { background: var(--rubric); border-color: var(--rubric); color: var(--paper-hi); }
+.btn.rubric:hover { background: #6f2219; border-color: #6f2219; }
+.mail { font-family: var(--serif-en); font-size: 19px; letter-spacing: .04em; word-break: break-all; }
+
+/* ---------- 目次 ---------- */
+.toc { padding: 64px 0 24px; border-top: 1px solid var(--rule); }
+.toc-h { text-align: center; font-size: 20px; letter-spacing: .8em; text-indent: .8em; margin-bottom: 30px; }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc a { display: flex; align-items: baseline; gap: 14px; padding: 7px 0; text-decoration: none; }
+.toc .r { width: 2.6em; text-align: right; font-family: var(--serif-en); font-size: 18px; color: var(--ink-3); }
+.toc .t { transition: color .25s; }
+.toc i { flex: 1; border-bottom: 1px dotted var(--ink-3); transform: translateY(-5px); }
+.toc .p { color: var(--ink-3); font-size: 14px; }
+.toc a:hover .t { color: var(--rubric); }
+
+/* ---------- 章 ---------- */
+.chapter { padding-top: 140px; }
+.cap { margin: 0; text-align: center; font-size: 14px; letter-spacing: .3em; text-indent: .3em; color: var(--ink-3); }
+.cap .r { font-family: var(--serif-en); font-size: 18px; letter-spacing: 0; color: var(--rubric); }
+.chapter h2 { text-align: center; font-size: clamp(30px, 2.6vw, 38px); letter-spacing: .24em; text-indent: .24em; margin: 8px 0 0; }
+.chapter h2::after { /* 章の頭のしるし */
+  content: ""; display: block; width: 18px; height: 28px; margin: 22px auto 44px;
+  background: var(--gold);
+  -webkit-mask: url(../images/logo.png) center / contain no-repeat;
+  mask: url(../images/logo.png) center / contain no-repeat;
+}
+.opening { margin: 0 0 40px; }
+.opening::first-letter {
+  float: left; font-size: 2.9em; line-height: 1; font-weight: 800; color: var(--rubric);
+  margin: .12em .22em 0 0; padding: .16em .18em;
+  border: 1px solid var(--gold); background: rgba(161, 122, 44, .07);
+}
+
+.numbered { list-style: none; counter-reset: n; margin: 0; padding: 0; }
+.numbered li { counter-increment: n; position: relative; padding: 0 0 30px 3.2em; }
+.numbered li::before {
+  content: counter(n, lower-roman) "."; position: absolute; left: 0; top: -.15em;
+  width: 2.4em; text-align: right; font-family: var(--serif-en); font-style: italic; font-size: 22px; color: var(--rubric);
+}
+.numbered h3 { font-size: 19px; letter-spacing: .06em; margin-bottom: 4px; }
+.numbered p { margin: 0; color: var(--ink-2); }
+
+.entry { padding: 34px 0; border-top: 1px solid var(--rule); }
+.entry .meta { margin: 0; font-family: var(--serif-en); font-style: italic; font-size: 16px; color: var(--ink-3); }
+.entry h3 { font-size: 22px; line-height: 1.6; letter-spacing: .04em; margin: 4px 0 12px; }
+.entry p { margin: 0 0 14px; color: var(--ink-2); }
+.entry ul { list-style: none; margin: 0 0 16px; padding: 0; color: var(--ink-2); }
+.entry li { position: relative; padding-left: 1.4em; margin-bottom: 4px; line-height: 1.85; }
+.entry li::before { content: ""; position: absolute; left: .3em; top: .85em; width: 5px; height: 5px; background: var(--gold); transform: rotate(45deg); }
+.entry .label { margin: 18px 0 6px; font-size: 13px; letter-spacing: .3em; color: var(--ink-3); }
+.entry .tech { margin: 0; font-family: var(--serif-en); font-style: italic; font-size: 17px; color: var(--gold); }
+.entry.featured {
+  border: 1px solid var(--rule); padding: 38px 40px; margin: 6px 0 34px;
+  background: rgba(250, 243, 226, .55);
+  box-shadow: inset 0 0 0 5px rgba(237, 227, 203, .9), inset 0 0 0 6px rgba(196, 174, 134, .8);
+}
+.entry.featured + .entry { border-top: 0; padding-top: 0; }
+.entry.blank h3, .entry.blank p { color: var(--ink-3); }
+
+.sub-h { font-size: 15px; letter-spacing: .3em; color: var(--ink-3); font-weight: 600; margin: 0 0 12px; }
+.leaders { list-style: none; margin: 0 0 40px; padding: 0; }
+.leaders li { display: flex; align-items: baseline; gap: 12px; padding: 5px 0; }
+.leaders i { flex: 1; border-bottom: 1px dotted var(--ink-3); transform: translateY(-5px); }
+.leaders li > span:first-child { font-weight: 600; }
+.leaders li > span:last-child { color: var(--ink-2); font-size: 15px; }
+.leaders b { font-family: var(--serif-en); font-weight: 600; font-size: 22px; font-variant-numeric: oldstyle-nums; }
+.list { margin: 0 0 36px; color: var(--ink-2); line-height: 2.1; text-align: justify; }
+.list sup { color: var(--rubric); font-size: .7em; margin-left: 1px; }
+.list.faint { color: var(--ink-3); }
+.footnote { margin: 0; padding-top: 12px; border-top: 1px solid var(--rule); width: max-content; max-width: 100%; font-size: 13px; color: var(--ink-3); }
+
+.annals { list-style: none; margin: 0; padding: 0; }
+.annals li { display: grid; grid-template-columns: 4.6em 1fr; gap: 20px; padding: 16px 0; border-top: 1px solid var(--rule); }
+.annals li:last-child { border-bottom: 1px solid var(--rule); }
+.annals time { font-family: var(--serif-en); font-weight: 600; font-size: 24px; line-height: 1.5; font-variant-numeric: oldstyle-nums; color: var(--rubric); }
+.annals h3 { font-size: 17px; letter-spacing: .04em; }
+.annals p { margin: 0; color: var(--ink-2); font-size: 17.5px; }
+
+.fleurons { list-style: none; margin: 0; padding: 0; }
+.fleurons li { position: relative; padding: 0 0 22px 2.2em; color: var(--ink-2); }
+.fleurons li::before {
+  content: ""; position: absolute; left: .4em; top: .45em; width: 11px; height: 17px; background: var(--gold);
+  -webkit-mask: url(../images/logo.png) center / contain no-repeat;
+  mask: url(../images/logo.png) center / contain no-repeat;
+}
+.fleurons b { color: var(--ink); }
+
+.colophon { margin-top: 140px; padding-top: 28px; border-top: 3px double var(--rule); text-align: center; font-size: 14px; color: var(--ink-3); }
+.colophon dl { display: inline-grid; grid-template-columns: auto auto; gap: 4px 20px; margin: 18px 0; text-align: left; }
+.colophon dl div { display: contents; }
+.colophon dt { letter-spacing: .3em; }
+.colophon dd { margin: 0; font-family: var(--serif-en); font-size: 16px; color: var(--ink-2); }
+.colophon .copy { margin: 0; font-family: var(--serif-en); letter-spacing: .1em; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .caption .pt.show { animation: none; }
+}
+
+/* ---------- スマホ・狭い画面: 1ページの本。紋章は最初大きく、そのあと右下の印になる ---------- */
+@media (max-width: 979px) {
+  .book { display: block; margin: 0; box-shadow: none; }
+  .page-left { padding: 0 22px 120px; }
+  .corner, .fc { display: none; }
+  body { font-size: 17.5px; }
+  .page-left::before { display: none; }
+  .page-right { display: contents; }
+  .title-page { padding-top: 330px; }
+  .imprint { font-size: 11px; letter-spacing: .2em; margin-bottom: 26px; }
+  .chapter.last { padding-bottom: 60px; }
+  h1 { font-size: 104px; margin-bottom: 30px; }
+  /* ページをめくる本にならなかったとき（JS なし・割り付けの失敗）だけ使う。紋章は表紙の上に置き、本文と一緒に流れる */
+  .plate {
+    position: absolute; z-index: 20; top: 28px; left: calc(50vw - 140px);
+    width: 280px; height: 280px; padding: 0;
+  }
+  .frame { width: 100%; border: 0; box-shadow: none; border-radius: 50%; }
+  .frame::after { display: none; }
+  .caption, .hint { display: none; }
+  .chapter { padding-top: 110px; }
+  .entry.featured { padding: 28px 22px; }
+  .annals li { grid-template-columns: 1fr; gap: 0; }
+  .toc .r { width: 2em; }
+}
+
+/* ---------- ほかの世界のための部品（魔導書では使わない） ---------- */
+#scene { display: none; }
+
+/* ---------- 世界の切り替え ---------- */
+.worlds {
+  position: fixed; z-index: 40; top: calc(14px + env(safe-area-inset-top, 0px)); right: calc(14px + env(safe-area-inset-right, 0px));
+  display: flex; gap: 2px; padding: 4px; border: 1px solid var(--rule); background: rgba(237, 227, 203, .92);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+}
+.worlds button {
+  font: 600 12px var(--serif-jp); letter-spacing: .12em; color: var(--ink-2);
+  background: transparent; border: 0; padding: 5px 10px; cursor: pointer;
+}
+.worlds button[aria-pressed="true"] { color: var(--paper-hi); background: var(--ink); }
+.worlds button[data-world="random"][aria-pressed="true"] { background: var(--rubric); }
+.worlds button:focus-visible { outline: 2px solid var(--rubric); outline-offset: 2px; }
+html.leaving body { opacity: 0; transition: opacity .35s ease; }
+@media (max-width: 979px) {
+  .worlds { top: auto; right: auto; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); left: calc(14px + env(safe-area-inset-left, 0px)); }
+  .worlds button { padding: 5px 8px; letter-spacing: .04em; }
+}
+
+/* ==========================================================
+   ページをめくる本（grimoire.js が html.paged を付け、本文をページに割り付ける）
+   JS が動かないときは、ここより上の「縦に読む本」のまま
+   ========================================================== */
+html.paged { --pad-t: 62px; --pad-b: 72px; --pad-x: clamp(40px, 4.4vw, 72px); --logo: 104px; }
+html.paged[data-mode="single"] { --pad-t: 44px; --pad-b: 50px; --pad-x: clamp(20px, 5.6vw, 52px); --logo: 56px; }
+html.paged, html.paged body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+/* 書体が届くまで、本は伏せておく */
+html.paging .book, html.paging .deskbar { opacity: 0; }
+
+html.paged .book {
+  position: fixed; z-index: 1; top: var(--book-top, 22px); left: calc(50% - var(--pw));
+  width: calc(var(--pw) * 2); height: var(--ph); max-width: none; margin: 0;
+  display: block;
+  box-shadow: 0 34px 80px rgba(0, 0, 0, .55), 0 0 0 1px rgba(0, 0, 0, .4);
+  transition: opacity .6s ease;
+}
+/* 1ページずつ: 開いた本の右ページだけが見えている。
+   左に向かいのページのはし（綴じ目へ沈む）、右と下に紙の重なり、その外に革の表紙のふち */
+html.paged[data-mode="single"] .book { left: var(--book-left); width: var(--pw); box-shadow: none; }
+html.paged[data-mode="single"] .book::before {
+  content: ""; position: absolute; z-index: -1; top: -6px; bottom: -12px; left: -12px; right: -16px;
+  border-radius: 3px 6px 6px 3px;
+  background: linear-gradient(to right, #3a1810, #5a261a 30%, #4a1f15);
+  box-shadow: inset 0 0 0 3px #4d2117, inset 0 0 0 4px rgba(196, 154, 69, .55), 0 18px 40px rgba(0, 0, 0, .55);
+}
+html.paged[data-mode="single"] .pages::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -12px; width: 12px;
+  background: linear-gradient(to right, #e6d9bb, #c9b58c 45%, #8c7349 85%, #6b5432);
+}
+html.paged[data-mode="single"] .pages::after {
+  content: ""; position: absolute; top: 3px; bottom: -6px; left: 4px; right: -9px; z-index: -1;
+  background:
+    repeating-linear-gradient(90deg, #e2d4b1 0 1px, #b6a27a 1px 2px) right top / 9px 100% no-repeat,
+    repeating-linear-gradient(180deg, #e2d4b1 0 1px, #b6a27a 1px 2px) left bottom / 100% 6px no-repeat;
+}
+html.paged .pages {
+  position: absolute; inset: 0; padding: 0;
+  perspective: 2400px;
+  background: #cdbd98;
+  touch-action: pinch-zoom;
+  -webkit-user-select: none; user-select: none;
+}
+html.paged .pages.hot { cursor: pointer; }
+/* 小口: 読んだページは左に、残りは右に積もる */
+html.paged[data-mode="spread"] .pages::before,
+html.paged[data-mode="spread"] .pages::after {
+  content: ""; position: absolute; top: 4px; bottom: 4px;
+  background: repeating-linear-gradient(90deg, #dccdaa 0 1px, #b7a47c 1px 2px);
+  transition: width .6s ease;
+}
+html.paged[data-mode="spread"] .pages::before { right: 100%; width: var(--thick-l, 0px); }
+html.paged[data-mode="spread"] .pages::after { left: 100%; width: var(--thick-r, 0px); }
+
+/* ---------- ページ ---------- */
+html.paged .pg {
+  position: absolute; top: 0; left: 0; width: var(--pw); height: var(--ph);
+  padding: var(--pad-t) var(--pad-x) var(--pad-b);
+  visibility: hidden; overflow: hidden;
+  background-color: var(--paper);
+  background-image:
+    var(--grain), var(--foxing), var(--mottle),
+    linear-gradient(to bottom, var(--burn), transparent 160px),
+    linear-gradient(to top, var(--burn), transparent 160px),
+    linear-gradient(to right, rgba(95, 64, 26, .26), transparent 9%, transparent 93%, var(--burn));
+  background-size: 220px, 910px, 640px, 100% 100%, 100% 100%, 100% 100%;
+}
+/* 左のページは、のど（綴じ目）が右にある */
+html.paged .pg.l {
+  background-image:
+    var(--grain), var(--foxing), var(--mottle),
+    linear-gradient(to bottom, var(--burn), transparent 160px),
+    linear-gradient(to top, var(--burn), transparent 160px),
+    linear-gradient(to right, var(--burn), transparent 7%, transparent 88%, rgba(95, 64, 26, .28));
+}
+html.paged .pg.at-l { visibility: visible; left: 0; }
+html.paged .pg.at-r { visibility: visible; left: var(--pw); }
+html.paged[data-mode="single"] .pg.at-r { left: 0; }
+html.paged .pg-body { position: relative; height: 100%; overflow: hidden; }
+html.paged .pg.tall .pg-body { overflow-y: auto; touch-action: pan-y; }
+html.paged .pg.center .pg-body { display: flex; flex-direction: column; justify-content: center; }
+html.paged .pg .corner { display: block; width: 62px; height: 62px; opacity: .8; }
+html.paged .pg .corner.tl { top: 16px; left: 16px; }
+html.paged .pg .corner.tr { top: 16px; right: 16px; }
+html.paged .pg .corner.bl { bottom: 16px; left: 16px; }
+html.paged .pg .corner.br { bottom: 16px; right: 16px; }
+html.paged[data-mode="single"] .pg .corner { width: 38px; height: 38px; }
+html.paged[data-mode="single"] .pg .corner.tl, html.paged[data-mode="single"] .pg .corner.tr { top: 9px; }
+html.paged[data-mode="single"] .pg .corner.bl, html.paged[data-mode="single"] .pg .corner.br { bottom: 9px; }
+html.paged[data-mode="single"] .pg .corner.tl, html.paged[data-mode="single"] .pg .corner.bl { left: 9px; }
+html.paged[data-mode="single"] .pg .corner.tr, html.paged[data-mode="single"] .pg .corner.br { right: 9px; }
+/* 右上は紋章が浮かぶ場所なので、飾りは置かない */
+html.paged[data-mode="single"] .pg .corner.tr { display: none; }
+html.paged .folio {
+  position: absolute; left: 0; right: 0; bottom: calc(var(--pad-b) * .34);
+  text-align: center; font: 500 16px/1 var(--serif-en); letter-spacing: .12em;
+  font-variant-numeric: oldstyle-nums; color: var(--ink-3); pointer-events: none;
+}
+/* 本の終わりの白いページには、小さな印だけ */
+html.paged .pg.blank::before {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 26px; height: 40px; margin: -20px 0 0 -13px;
+  background: var(--gold); opacity: .3;
+  -webkit-mask: url(../images/logo.png) center / contain no-repeat;
+  mask: url(../images/logo.png) center / contain no-repeat;
+}
+
+/* 端にマウスを寄せると、角が少し折れて下の紙がのぞく */
+html.paged .pg .fold {
+  position: absolute; z-index: 3; right: 0; bottom: 0; width: 0; height: 0; pointer-events: none;
+  background:
+    linear-gradient(to bottom right, #d6c59d 0%, #ece1c6 30%, #f5ecd8 49.6%, transparent 50%),
+    linear-gradient(to bottom right, transparent 50%, #cbb98f 50%, #e3d6b5 78%);
+  filter: drop-shadow(-3px -3px 5px rgba(60, 38, 14, .28));
+  transition: width .32s cubic-bezier(.2, .7, .2, 1), height .32s cubic-bezier(.2, .7, .2, 1);
+}
+html.paged .pg.peek-prev .fold {
+  right: auto; left: 0;
+  background:
+    linear-gradient(to bottom left, #d6c59d 0%, #ece1c6 30%, #f5ecd8 49.6%, transparent 50%),
+    linear-gradient(to bottom left, transparent 50%, #cbb98f 50%, #e3d6b5 78%);
+  filter: drop-shadow(3px -3px 5px rgba(60, 38, 14, .28));
+}
+html.paged .pg.peek .fold { width: 52px; height: 52px; }
+
+/* ---------- めくる紙（短冊をつないで曲げる。grimoire.js が角度を書く） ---------- */
+html.paged .cast { position: absolute; top: 0; z-index: 4; width: var(--pw); height: var(--ph); opacity: 0; pointer-events: none; }
+html.paged .cast.l { left: 0; background: linear-gradient(to left, rgba(40, 24, 8, .62), rgba(40, 24, 8, .2) 28%, transparent 68%); }
+html.paged .cast.r { left: var(--pw); background: linear-gradient(to right, rgba(40, 24, 8, .62), rgba(40, 24, 8, .2) 28%, transparent 68%); }
+html.paged[data-mode="single"] .cast.r { left: 0; }
+html.paged .turn { position: absolute; top: 0; z-index: 5; width: var(--pw); height: var(--ph); transform-style: preserve-3d; pointer-events: none; }
+html.paged .strip { position: absolute; top: 0; height: 100%; transform-origin: 0 50%; transform-style: preserve-3d; }
+html.paged .face { position: absolute; inset: 0; overflow: hidden; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+html.paged .face.back { transform: rotateY(180deg); }
+html.paged .face.plain { background-color: #e6dbc1; background-image: var(--grain), var(--mottle); background-size: 220px, 640px; }
+html.paged .face .ghost { visibility: visible; top: 0; }
+html.paged .face .shade { position: absolute; inset: 0; }
+html.paged .turn .fold { display: none; }
+
+/* ---------- 文字が本の外から集まる（grimoire.js が写しの文字を .gather-layer に置いて飛ばす） ---------- */
+/* 集まっている間、ページの本物の文字は透明にしておく。罫線や枠、飾りはそのまま */
+html.paged .pg.gathering .pg-body,
+html.paged .pg.gathering .pg-body *,
+html.paged .pg.gathering .pg-body *::first-letter { color: transparent !important; }
+/* 透明にしたり戻したりする間は、色がゆっくり変わる効果（ボタン・目次）を止める */
+html.paged .pg.gathering .pg-body *, html.paged .pg.notrans .pg-body * { transition: none !important; }
+/* 写しの文字を置く層。fixed にすると別の層として描かれ、止まったあとの字の描き方が本物と変わるので absolute にする
+   （html と body は画面いっぱいでスクロールしないので、位置は画面と同じ） */
+.gather-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; pointer-events: none; }
+/* will-change は付けない。動いている間だけ別の層になり、止まれば本物と同じ描き方に戻る */
+.gch { position: absolute; white-space: pre; }
+
+/* ---------- ページの中身の間隔（1ページに収まるよう、縦に読む本より詰める） ---------- */
+html.paged .title-page, html.paged .toc, html.paged .chapter { padding: 0; border: 0; }
+html.paged h1 { font-size: clamp(72px, min(8vw, 11vh), 140px); margin-bottom: 22px; }
+html.paged[data-mode="single"] h1 { font-size: clamp(64px, min(24vw, 12vh), 104px); }
+html.paged .headpiece { margin-bottom: 16px; }
+html.paged .imprint { margin-bottom: 18px; }
+html.paged .motto { margin-bottom: 16px; }
+html.paged .lead { margin-bottom: 22px; }
+html.paged .ledger { margin-bottom: 24px; }
+html.paged .ledger div { padding: 7px 0; }
+html.paged .orn { margin-bottom: 20px; }
+html.paged .chapter h2::after { margin: 14px auto 26px; }
+html.paged .opening { margin-bottom: 24px; }
+html.paged .toc-h { margin-bottom: 22px; }
+html.paged .toc .p { font-family: var(--serif-en); font-size: 17px; font-variant-numeric: oldstyle-nums; }
+html.paged .numbered li { padding-bottom: 22px; }
+html.paged .entry { padding: 22px 0; }
+html.paged .entry.featured { padding: 26px 28px; margin: 0 0 18px; }
+html.paged[data-mode="single"] .entry.featured { padding: 22px 18px; }
+html.paged .entry.cont:not(.featured) { border-top: 0; padding-top: 0; }
+html.paged .leaders { margin-bottom: 28px; }
+html.paged .list { margin-bottom: 26px; }
+/* 技術の列挙は1つの段落で、途中で分けられない。狭いページでは字と行間を詰めて1ページに収める */
+html.paged[data-mode="single"] .list { font-size: 15.5px; line-height: 1.75; }
+html.paged .annals li { padding: 12px 0; }
+html.paged .actions.center { margin-top: 24px; }
+html.paged .colophon { margin-top: 40px; }
+
+/* ---------- 右上に浮かぶ紋章。押すと目次へ、ドラッグで回る ---------- */
+html.paged .page-right {
+  position: fixed; z-index: 30; top: 12px; right: 14px; width: var(--logo); height: var(--logo);
+  display: block; background: none;
+}
+html.paged .page-right::after { display: none; }
+html.paged .plate {
+  position: static; width: 100%; height: 100%; padding: 0;
+  perspective: none; transform: none !important; transition: none;
+  animation: sigil-float 7s ease-in-out infinite;
+}
+@keyframes sigil-float { 50% { translate: 0 -5px; } }
+html.paged .frame { width: 100%; height: 100%; border: 0; border-radius: 0; box-shadow: none !important; background: none !important; }
+html.paged .frame::after, html.paged .fc, html.paged .caption, html.paged .plate .hint { display: none; }
+html.paged #sigil { cursor: pointer; filter: drop-shadow(0 8px 16px rgba(0, 0, 0, .55)) drop-shadow(0 0 14px rgba(196, 154, 69, .22)); }
+html.paged .plate.can-drag #sigil { cursor: grab; }
+html.paged[data-mode="single"] .page-right { top: 6px; right: 8px; }
+html.paged[data-mode="single"] #sigil { filter: drop-shadow(0 3px 6px rgba(60, 38, 14, .35)); }
+
+/* ---------- 机の上の道具: ページの送り・番号と、世界の切り替え ---------- */
+.deskbar { display: none; }
+html.paged .deskbar {
+  position: fixed; z-index: 40; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 2px; padding: 3px 4px;
+  border: 1px solid var(--rule); background: rgba(237, 227, 203, .92);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+  transition: opacity .6s ease;
+}
+html.paged .deskbar button {
+  width: 32px; height: 28px; padding: 0; border: 0; background: transparent; cursor: pointer;
+  font: 500 22px/1 var(--serif-en); color: var(--ink);
+}
+html.paged .deskbar button:hover:not(:disabled) { color: var(--rubric); }
+html.paged .deskbar button:disabled { color: var(--rule); cursor: default; }
+html.paged .deskbar button:focus-visible { outline: 2px solid var(--rubric); outline-offset: 1px; }
+html.paged .deskbar .count {
+  min-width: 6.2em; text-align: center; font: 500 15px/1 var(--serif-en); letter-spacing: .08em;
+  font-variant-numeric: oldstyle-nums; color: var(--ink-2);
+}
+html.paged .deskbar .desk-hint {
+  position: absolute; left: calc(100% + 18px); white-space: nowrap;
+  font: italic 14px var(--serif-jp); letter-spacing: .1em; color: rgba(237, 227, 203, .62);
+  transition: opacity .8s ease;
+}
+html.paged .deskbar.turned .desk-hint { opacity: 0; }
+/* 1ページずつのときは、下の世界の切り替えと重ならないよう、ページ送りを左上に置く（右上は紋章） */
+html.paged[data-mode="single"] .deskbar { top: calc(10px + env(safe-area-inset-top, 0px)); bottom: auto; left: calc(10px + env(safe-area-inset-left, 0px)); transform: none; }
+html.paged[data-mode="single"] .deskbar .count { min-width: 4.6em; }
+html.paged[data-mode="single"] .deskbar .desk-hint { display: none; }
+html.paged .worlds {
+  top: auto; right: auto;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px)); left: calc(14px + env(safe-area-inset-left, 0px));
+}

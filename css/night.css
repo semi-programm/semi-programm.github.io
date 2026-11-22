@@ -1,0 +1,148 @@
+/* 夏の夜。藍色の空に文字を一段だけ置き、光はセミと蛍だけに使う。中身の HTML は魔導書と共通 */
+:root {
+  color-scheme: dark;
+  --night: #070b1e;
+  --night-2: #0f1735;
+  --ink: #e6e8f3;
+  --text: #c4c9de;
+  --mute: #98a0c0;
+  --glow: #e2f27a;
+  --amber: #f3c873;
+  --rule: rgba(230, 232, 243, .13);
+  --display: "Bodoni Moda", "Shippori Mincho B1", serif;
+  --jp: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --label: "Zen Kaku Gothic New", "Hiragino Sans", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html { background: var(--night); scroll-behavior: smooth; }
+body {
+  margin: 0; min-height: 100vh;
+  background:
+    radial-gradient(ellipse 60% 40% at 86% 4%, rgba(210, 220, 255, .13), transparent 70%) fixed,
+    linear-gradient(#060918 0%, var(--night) 40%, var(--night-2) 100%) fixed;
+  background-color: var(--night);
+  color: var(--ink);
+  font-family: var(--jp);
+  font-size: 17px;
+  line-height: 2;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--glow); outline-offset: 4px; }
+h1, h2, h3 { margin: 0; font-weight: 600; }
+.nw { display: inline-block; }
+#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; pointer-events: none; }
+
+/* 魔導書だけの部品は隠す */
+.page-right, .corner, .headpiece, .orn, .toc .r, .toc i, .toc .p, .leaders i, .colophon dl { display: none; }
+
+.book {
+  position: relative; z-index: 1;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 18vh;
+}
+.page-left { max-width: 36em; margin-left: clamp(0px, 7vw, 128px); }
+/* 散った粒の上でも文字が沈まないよう、夜の色でうっすら縁取る */
+.page-left p, .page-left li, .page-left dd, .page-left dt, .page-left h3 { text-shadow: 0 0 10px rgba(7, 11, 30, .95), 0 0 2px rgba(7, 11, 30, .9); }
+
+/* 表紙 */
+.title-page { padding-block: 22vh 8vh; }
+.imprint, .cap, .toc-h { font-family: var(--label); font-size: 12px; letter-spacing: .32em; text-transform: uppercase; color: var(--mute); margin: 0 0 22px; text-align: left; text-indent: 0; }
+h1 {
+  font-family: var(--display); font-style: italic; font-weight: 400;
+  font-size: clamp(88px, 12vw, 172px); line-height: .9; letter-spacing: -.01em;
+  margin: 0 0 30px; color: #f6f3e8;
+  text-shadow: 0 0 40px rgba(226, 242, 122, .18);
+}
+.motto { margin: 0 0 20px; font-size: clamp(20px, 2.1vw, 26px); font-weight: 600; line-height: 1.8; letter-spacing: .06em; color: #f1e6b9; text-wrap: balance; }
+.lead { margin: 0 0 36px; color: var(--mute); }
+.ledger { display: flex; flex-wrap: wrap; gap: 10px 32px; margin: 0 0 36px; }
+.ledger div { display: flex; flex-direction: column; }
+.ledger dt { font-family: var(--label); font-size: 12px; letter-spacing: .12em; color: var(--mute); }
+.ledger dd { margin: 0; font-size: 15px; }
+.ledger b { font-family: var(--display); font-style: italic; font-weight: 400; font-size: 34px; margin-right: 4px; color: var(--amber); }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 0; }
+.btn {
+  display: inline-block; padding: 9px 22px; border: 1px solid var(--rule); border-radius: 999px;
+  font: 14px var(--label); letter-spacing: .14em; text-decoration: none; color: var(--ink);
+  transition: border-color .3s, box-shadow .3s;
+}
+.btn:hover { border-color: var(--glow); box-shadow: 0 0 16px rgba(226, 242, 122, .35); }
+.btn.rubric { border-color: rgba(226, 242, 122, .5); background: rgba(226, 242, 122, .08); }
+
+/* 目次は横に並べる */
+.toc { padding-top: 6vh; }
+.toc-h { font-weight: 400; }
+.toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 22px; }
+.toc a { font-family: var(--label); font-size: 13px; letter-spacing: .14em; text-decoration: none; color: var(--mute); transition: color .3s, text-shadow .3s; }
+.toc a:hover { color: var(--glow); text-shadow: 0 0 12px rgba(226, 242, 122, .7); }
+
+/* 章 */
+.chapter { padding-top: 14vh; }
+.cap::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 12px; border-radius: 50%; background: var(--glow); box-shadow: 0 0 10px 2px rgba(226, 242, 122, .7); vertical-align: 2px; }
+.cap .r { font-family: var(--display); font-style: italic; letter-spacing: .1em; color: var(--glow); }
+.chapter h2 { font-size: clamp(28px, 2.6vw, 34px); letter-spacing: .14em; margin: 0 0 30px; text-wrap: balance; }
+.opening { margin: 0 0 30px; color: var(--text); }
+.numbered { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; }
+.numbered h3 { font-size: 18px; letter-spacing: .04em; margin-bottom: 4px; }
+.numbered p { margin: 0; color: var(--text); }
+
+.entry { padding: 28px 0; border-top: 1px solid var(--rule); }
+.entry .meta { font-family: var(--label); font-size: 12px; letter-spacing: .12em; color: var(--mute); margin: 0 0 6px; }
+.entry h3 { font-size: 21px; line-height: 1.6; margin-bottom: 10px; }
+.entry p { margin: 0 0 12px; color: var(--text); }
+.entry ul { list-style: none; margin: 0 0 14px; padding: 0; }
+.entry li { position: relative; padding-left: 1.4em; margin-bottom: 4px; color: var(--text); line-height: 1.85; }
+.entry li::before { content: ""; position: absolute; left: .3em; top: .8em; width: 4px; height: 4px; border-radius: 50%; background: var(--glow); box-shadow: 0 0 6px 1px rgba(226, 242, 122, .6); }
+.entry .label { font-family: var(--label); font-size: 12px; letter-spacing: .24em; color: var(--mute); margin: 14px 0 6px; }
+.entry .tech { font-family: var(--display); font-style: italic; font-size: 17px; color: var(--amber); margin: 0; }
+.entry.featured { border: 1px solid rgba(226, 242, 122, .28); background: rgba(12, 18, 44, .62); padding: 30px 28px; margin-bottom: 18px; backdrop-filter: blur(4px); }
+.entry.blank h3, .entry.blank p { color: var(--mute); }
+
+.sub-h { font-family: var(--label); font-size: 13px; font-weight: 400; letter-spacing: .24em; color: var(--mute); margin: 30px 0 10px; }
+.leaders { list-style: none; margin: 0; padding: 0; }
+.leaders li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+.leaders b { font-family: var(--display); font-style: italic; font-weight: 400; font-size: 22px; color: var(--amber); }
+.list { color: var(--text); line-height: 2.1; margin: 0 0 12px; }
+.list sup { color: var(--glow); }
+.list.faint { color: var(--mute); }
+.footnote { font-size: 13px; color: var(--mute); margin: 0; }
+
+.annals { list-style: none; margin: 0; padding: 0; }
+.annals li { display: grid; grid-template-columns: 4.4em minmax(0, 1fr); gap: 16px; padding: 14px 0; border-top: 1px solid var(--rule); }
+.annals time { font-family: var(--display); font-style: italic; font-size: 24px; line-height: 1.5; color: var(--amber); }
+.annals h3 { font-size: 17px; }
+.annals p { margin: 0; color: var(--text); }
+.fleurons { list-style: none; margin: 0; padding: 0; }
+.fleurons li { padding: 10px 0; border-top: 1px solid var(--rule); color: var(--text); }
+.fleurons b { color: var(--ink); }
+
+.actions.center { margin: 26px 0 0; }
+.btn.mail { font-family: var(--display); font-style: italic; font-size: clamp(20px, 2.6vw, 28px); letter-spacing: .02em; padding: 10px 26px; word-break: break-all; }
+.colophon { margin-top: 70px; }
+.colophon .cap { margin-bottom: 6px; }
+.colophon .cap::before { display: none; }
+.colophon .copy { font-family: var(--label); font-size: 12px; letter-spacing: .1em; color: var(--mute); margin: 0; }
+
+/* 世界の切り替え */
+.worlds {
+  position: fixed; z-index: 40; top: calc(14px + env(safe-area-inset-top, 0px)); right: calc(14px + env(safe-area-inset-right, 0px));
+  display: flex; gap: 2px; padding: 4px; border: 1px solid var(--rule); border-radius: 999px;
+  background: rgba(10, 15, 38, .72); backdrop-filter: blur(6px);
+}
+.worlds button { font: 12px var(--label); letter-spacing: .1em; color: var(--mute); background: transparent; border: 0; border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+.worlds button[aria-pressed="true"] { color: var(--night); background: var(--glow); box-shadow: 0 0 12px rgba(226, 242, 122, .45); }
+html.leaving body { opacity: 0; transition: opacity .35s ease; }
+
+@media (max-width: 1099px) { .page-left { max-width: 30em; } }
+@media (max-width: 699px) {
+  body { font-size: 16.5px; }
+  .page-left { margin-left: 0; }
+  .title-page { padding-top: 47vh; }
+  #contact { padding-top: 52vh; }
+  h1 { font-size: 84px; }
+  .worlds { top: auto; right: auto; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); left: calc(14px + env(safe-area-inset-left, 0px)); }
+  .worlds button { padding: 5px 9px; letter-spacing: .04em; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

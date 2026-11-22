@@ -1,574 +1,360 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Profile&ensp;semi-program</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mitz（semi-program）| Rails / Laravel エンジニア</title>
     <meta
       name="description"
-      content="Free HTML5 Website Template by freehtml5.co"
+      content="静岡県在住のフリーランスWebエンジニア Mitz（semi-program）のポートフォリオ。Ruby on Rails / Laravel を中心に、要件定義から運用まで担当します。"
     />
-    <meta
-      name="keywords"
-      content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive semi semi-program"
-    />
-    <meta name="author" content="freehtml5.co" />
+    <meta name="author" content="Mitz" />
+    <meta name="theme-color" content="#1b1510" />
+    <link rel="canonical" href="https://semi-programm.github.io/" />
     <link rel="icon" href="images/favicon.ico" />
 
-    <!-- Facebook and Twitter integration -->
-    <!-- <meta property="og:title" content="" />
-        <meta property="og:image" content="" />
-        <meta property="og:url" content="" />
-        <meta property="og:site_name" content="" />
-        <meta property="og:description" content="" />
-        <meta name="twitter:title" content="" />
-        <meta name="twitter:image" content="" />
-        <meta name="twitter:url" content="" />
-        <meta name="twitter:card" content="" /> -->
-
-    <link
-      href="https://fonts.googleapis.com/css?family=Space+Mono"
-      rel="stylesheet"
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="semi-program" />
+    <meta property="og:title" content="Mitz（semi-program）| Rails / Laravel エンジニア" />
+    <meta
+      property="og:description"
+      content="プログラムは道具。使うのは人。人のためのプログラムを。Rails / Laravel を中心に、要件定義から運用まで担当する静岡県在住のフリーランスWebエンジニアです。"
     />
-    <link
-      href="https://fonts.googleapis.com/css?family=Kaushan+Script"
-      rel="stylesheet"
-    />
+    <meta property="og:url" content="https://semi-programm.github.io/" />
+    <meta property="og:image" content="https://semi-programm.github.io/images/ogp.png" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- 3つの世界の書体をまとめて指定する。実際に読み込まれるのは、選ばれた世界の CSS が使うものだけ -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Walter+Turncoat&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Shippori+Mincho+B1:wght@400;600;800&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Marcellus&family=Zen+Old+Mincho:wght@400;600&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap"
       rel="stylesheet"
     />
-
-    <!-- Animate.css 視差効果をオフにするためローカル参照 -->
-    <link rel="stylesheet" href="css/animate.css" />
-    <!-- font awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
-      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <!-- Bootstrap v5  -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-    <!-- Theme style  -->
-    <link rel="stylesheet" href="css/style.css" />
+    <script>
+      // 世界を決める。見た人が選んだものがあればそれ、なければ前回と違うものをくじで選ぶ。
+      // 描く前に CSS を決めたいので、ここで同期的に書き出す
+      (function () {
+        var W = ["grimoire", "night", "mist"], pick = null, last = null;
+        try { pick = localStorage.getItem("world-choice"); last = localStorage.getItem("world-last"); } catch (e) {}
+        var q = new URLSearchParams(location.search).get("world");
+        if (W.indexOf(q) >= 0) pick = q;
+        if (W.indexOf(pick) < 0) {
+          var rest = W.filter(function (w) { return w !== last; });
+          pick = rest[Math.floor(Math.random() * rest.length)];
+        }
+        try { localStorage.setItem("world-last", pick); } catch (e) {}
+        var h = document.documentElement;
+        h.dataset.world = pick;
+        h.classList.add("js");
+        var tc = { grimoire: "#1b1510", night: "#070b1e", mist: "#e4e9e2" }[pick];
+        document.querySelector('meta[name="theme-color"]').setAttribute("content", tc);
+        document.write('<link rel="stylesheet" href="css/' + pick + '.css" />');
+      })();
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
   </head>
 
-  <body>
-    <div class="fh5co-loader"></div>
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-          <img src="images/avatar.png" alt="" width="30" height="24" />
-          semi-program
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="about"
-                href="#fh5co-about"
-                >About</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#fh5co-history">History</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#fh5co-features">Features</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#fh5co-skills">Skills</a>
-            </li>
-            <!-- <li class="nav-item">
-                            <a class="nav-link" href="#fh5co-work">Works</a>
-                        </li> -->
-            <li class="nav-item">
-              <a class="nav-link" href="#fh5co-started">Contact</a>
-            </li>
-          </ul>
-        </div>
-      </div>
+  <body data-chapter="0">
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <nav class="worlds" aria-label="世界を選ぶ">
+      <button type="button" data-world="grimoire">魔導書</button>
+      <button type="button" data-world="night">夏の夜</button>
+      <button type="button" data-world="mist">霧の森</button>
+      <button type="button" data-world="random">おまかせ</button>
     </nav>
-
-    <div id="page">
-      <header
-        id="fh5co-header"
-        class="fh5co-cover js-fullheight"
-        role="banner"
-        data-stellar-background-ratio="0.1"
-      >
-        <div class="overlay"></div>
-        <div class="container">
-          <div class="row">
-            <div class="col-12 text-center">
-              <div class="display-t js-fullheight">
-                <div class="display-tc js-fullheight">
-                  <img
-                    id="profile-logo"
-                    class="profile-thumb animate__animated animate__flip animate__repeat-2"
-                    src="images/avatar.png"
-                    alt="semi-logo"
-                  />
-                  <h1 class="animate__animated animate__lightSpeedInLeft">
-                    <span>semi-program</span>
-                  </h1>
-                  <h3 class="animate__animated animate__lightSpeedInRight">
-                    <span>Web バックエンド / web フロントエンド</span>
-                  </h3>
-                </div>
-              </div>
-            </div>
+    <div class="book">
+      <!-- 左のページ: 本文 -->
+      <main class="page page-left">
+        <i class="corner tl" aria-hidden="true"></i><i class="corner tr" aria-hidden="true"></i>
+        <header class="title-page" id="top" data-chapter="0" data-plate="点と線の写し">
+          <div class="headpiece" aria-hidden="true"></div>
+          <p class="imprint">semi-program · Freelance Web Engineer</p>
+          <h1>Mitz</h1>
+          <p class="motto">
+            <span class="nw">プログラムは道具。</span><span class="nw">使うのは人。</span><br /><span class="nw">人のためのプログラムを。</span>
+          </p>
+          <p class="lead">Rails / Laravel を中心に、要件定義から運用まで。静岡県在住のフリーランスエンジニアです。</p>
+          <dl class="ledger">
+            <div><dt>エンジニア歴</dt><dd><b data-nth="2019">8</b> 年目</dd></div>
+            <div><dt>フリーランス</dt><dd><b data-nth="2020-12">6</b> 年目</dd></div>
+            <div><dt>同じお客さまと</dt><dd><b data-years="2021-09">5</b> 年以上</dd></div>
+          </dl>
+          <div class="actions">
+            <a class="btn rubric" href="#contact">お仕事のご相談</a>
+            <a class="btn" href="#works">実績を読む</a>
           </div>
+        </header>
+
+        <nav class="toc" id="toc" data-chapter="0" data-plate="点と線の写し" aria-label="目次">
+          <h2 class="toc-h">目次</h2>
+          <ol>
+            <li><a href="#strengths"><span class="r">I</span><span class="t">強み</span><i></i><span class="p">一</span></a></li>
+            <li><a href="#works"><span class="r">II</span><span class="t">実績</span><i></i><span class="p">二</span></a></li>
+            <li><a href="#principles"><span class="r">III</span><span class="t">大事にしていること</span><i></i><span class="p">三</span></a></li>
+            <li><a href="#skills"><span class="r">IV</span><span class="t">技能</span><i></i><span class="p">四</span></a></li>
+            <li><a href="#history"><span class="r">V</span><span class="t">来歴</span><i></i><span class="p">五</span></a></li>
+            <li><a href="#about"><span class="r">VI</span><span class="t">人となり</span><i></i><span class="p">六</span></a></li>
+            <li><a href="#contact"><span class="r">VII</span><span class="t">便り</span><i></i><span class="p">七</span></a></li>
+          </ol>
+        </nav>
+
+        <section class="chapter" id="strengths" data-chapter="1" data-plate="回路を巡る光">
+          <div class="orn" aria-hidden="true"></div>
+          <p class="cap">第 <span class="r">I</span> 章</p>
+          <h2>強み</h2>
+          <p class="opening">長く任せてもらえること、作る前から入れること、AIを道具として使いこなすこと。この三つを大事にしています。</p>
+          <ol class="numbered">
+            <li>
+              <h3>長く任せられる</h3>
+              <p>同じお客さまの開発を、2021年から5年以上続けています。一括査定のシステムから始まり、今は不動産会社向けSaaSを担当。新しい機能づくりから不具合の修正、小さな改善まで、システムを育て続けるのが得意です。</p>
+            </li>
+            <li>
+              <h3>「何を作るか」から入れる</h3>
+              <p>PM兼プログラマーとして、要件定義・設計から実装・運用まで担当してきました。業務側と確認事項を詰めて要件を決め、画面のモックで形を見せてから作ります。エンジニアでない人向けの説明資料も書きます。</p>
+            </li>
+            <li>
+              <h3>AIで速く、確かに</h3>
+              <p>生成AIを組み込んだ機能づくりと、Claude Code を使った毎日の開発の両方をやっています。AIに任せる範囲と人が確かめる範囲を決めて、速さと品質を両立します。</p>
+            </li>
+          </ol>
+        </section>
+
+        <section class="chapter" id="works" data-chapter="2" data-plate="斜めからの姿">
+          <div class="orn" aria-hidden="true"></div>
+          <p class="cap">第 <span class="r">II</span> 章</p>
+          <h2>実績</h2>
+          <p class="opening">お客さまの名前は伏せて、何を作り、どこを工夫したかを記します。</p>
+
+          <article class="entry featured">
+            <p class="meta">不動産会社向けSaaS · 2026</p>
+            <h3>物件の資料を、AIが読んで自動で登録</h3>
+            <p>物件の概要書（PDF）や文章を生成AIが読み取り、内容を確かめるだけで登録できる機能です。</p>
+            <p class="label">工夫したところ</p>
+            <ul>
+              <li>1つの資料に載った複数の物件を、物件ごとに分けて登録</li>
+              <li>ロードバランサーに打ち切られる前に終わるよう、締め切りを設計</li>
+              <li>AIの混雑時は待ってやり直し、残高切れとは分けて通知</li>
+              <li>トークン数と時間を記録してコストを見える化。資料の中身はログに残さない</li>
+            </ul>
+            <p class="tech">Ruby on Rails · OpenAI API · Stimulus · Slack</p>
+          </article>
+
+          <article class="entry">
+            <p class="meta">不動産会社向けSaaS · 2025〜 継続中</p>
+            <h3>買取再販業者向けの、仕入れ判断ツールを中心になって開発</h3>
+            <p>仕入れの査定と、候補物件の管理をまとめたツールです。上のAIでの登録も、このツールの機能です。</p>
+            <ul>
+              <li>業務側と要件定義書を書き、確認事項に番号を振って詰める</li>
+              <li>画面のモックで今との違いを見せてから着手。フェーズを切ってもう1人と分担</li>
+              <li>営業向けに、価格や利回りの出し方を専門用語なしで説明する資料を作成</li>
+              <li>用途地域や半径の円を重ねた地図と、その印刷</li>
+            </ul>
+            <p class="tech">Ruby on Rails · Hotwire · MySQL · ClickHouse · Mapbox · Google Maps · OpenAI API</p>
+          </article>
+
+          <article class="entry">
+            <p class="meta">不動産会社向けSaaS · 2026</p>
+            <h3>収益還元法の価格の出し方を、事例で検証して実装</h3>
+            <p>「投資家に売るならいくらか」の出し方を、過去の売買事例で確かめてから実装しました。</p>
+            <ul>
+              <li>業務側の3つの案を検証し、それぞれの弱点を数字で示す</li>
+              <li>自分自身を除いて測る・未来のデータを使わない・地域や広さで分けて見る、の手順で精度を確認</li>
+              <li>自分の案も出したうえで、業務側が選んだ案を実装</li>
+            </ul>
+            <p class="tech">Snowflake · SQL · Ruby on Rails · ClickHouse</p>
+          </article>
+
+          <article class="entry">
+            <p class="meta">不動産会社向けSaaS · 2024〜 継続中</p>
+            <h3>取引事例の検索と、査定書のサービス</h3>
+            <p>取引事例を探して査定書を作るサービスを、前のシステムの頃から開発しています。</p>
+            <ul>
+              <li>前のシステムで、査定書に住宅ローン金利のページ・担当者の写真・LINEの友だち追加を足し、重なっていたスタイル約4,700行を削減</li>
+              <li>スマホの査定書と地図の画面を、前のシステムから作り直し。提携先向けの版とログイン連携も新しいシステムへ移行</li>
+              <li>トップページの作り直しと、一棟の収益物件の査定の最初の版</li>
+              <li>事例のPDFの取り込み、e-Stat の人口グラフ、代理ログイン、査定書の通知メール</li>
+              <li>PDF生成（Playwright）のビルドの固定と手順書、k6 の負荷テスト、障害の Slack 通知</li>
+            </ul>
+            <p class="tech">Ruby on Rails · Hotwire · ViewComponent · MySQL · Playwright · Mapbox · k6 · AWS</p>
+          </article>
+
+          <article class="entry">
+            <p class="meta">不動産会社向けSaaS（インフラ・運用） · 2026</p>
+            <h3>止まると丸一日戻らなかった通知の仕組みを、作り直し</h3>
+            <p>3分おきに通知メールを送る定期処理を作り直し、本番を切り替えました。</p>
+            <ul>
+              <li>1回の失敗で翌日まで止まる作りを、3分ごとに別々に起動する形に</li>
+              <li>取り残しを拾う見回りと、失敗・未起動の Slack 通知（ほかの定期処理6本にも）</li>
+              <li>二重に送らない切り替えの手順と戻し方を、先に書いてから切り替え</li>
+            </ul>
+            <p class="tech">AWS（Step Functions・EventBridge・CloudWatch） · Ruby on Rails</p>
+          </article>
+
+          <article class="entry">
+            <p class="meta">マンションの一括査定サービス（運営・不動産会社向け） · 2021〜2024</p>
+            <h3>一括査定の運営画面と、不動産会社向け画面の開発</h3>
+            <p>売却査定の依頼を、提携する不動産会社に届けるサービスの裏側です。2021年10月からは、コミットの約9割を担当しました。</p>
+            <ul>
+              <li>運営向けの集計画面（売上・会社別・エリア別など。グラフとCSV）</li>
+              <li>依頼者が自分で依頼内容を直せるフォーム</li>
+              <li>依頼者へのメールのテンプレートと、自動で再送するバッチ</li>
+              <li>アンケートの催促メールの設定と、Salesforce への毎月の書き込み</li>
+            </ul>
+            <p class="tech">PHP · Laravel · MySQL · jQuery · Salesforce API</p>
+          </article>
+
+          <article class="entry">
+            <p class="meta">マンションの検索・査定サイト（一般向け） · 2023〜2024</p>
+            <h3>サイトの作り直しを立ち上げ、会員まわりと管理画面を開発</h3>
+            <p>前のサイトを Laravel と React で作り直しました。最初の4か月は、ほぼ一人で開発しています。</p>
+            <ul>
+              <li>リポジトリと開発環境の立ち上げ（Docker・React・Inertia.js）</li>
+              <li>会員登録とログイン（メールでの本人確認、SNS ログイン、退会など）</li>
+              <li>会員マイページ（購入・売却・住み替え、シミュレーション）</li>
+              <li>管理画面の土台と、会員・FAQ・バナーなどの管理</li>
+            </ul>
+            <p class="tech">Laravel · React · TypeScript · Inertia.js · Docker</p>
+          </article>
+
+          <article class="entry">
+            <p class="meta">スポーツ大会の運営サービス · 2021〜2023</p>
+            <h3>テニス大会の試合進行表を作って配る Web アプリ</h3>
+            <p>運営者が「どのコートで、いつ、どの試合か」を決めて、選手に知らせるサービスです。運営者向けと選手向けの2つの画面を、ほぼ一人で作りました。</p>
+            <ul>
+              <li>コート×時間の表に、試合をドラッグ&amp;ドロップで割り当て</li>
+              <li>スコアの入力、CSV 出力、選手への LINE メッセージ</li>
+              <li>選手向けの LINE ログインと、進行表の閲覧（自動で更新）</li>
+            </ul>
+            <p class="tech">React · TypeScript · Redux Toolkit · AWS Amplify</p>
+          </article>
+
+          <article class="entry">
+            <p class="meta">受託開発企業 · 2019〜2020</p>
+            <h3>業務システムの受託開発</h3>
+            <p>Laravel・CakePHP で、見積もりから運用まで一通り担当。入社1年足らずでチームリーダーを任されました。</p>
+            <p class="tech">PHP · Laravel · CakePHP · MySQL</p>
+          </article>
+
+          <article class="entry">
+            <p class="meta">個人開発 · 2026</p>
+            <h3>サービスの種を、AIエージェントが集めて分析する仕組み</h3>
+            <p>有料アプリへの不満を自動で集め、AI に分類・採点させる仕組みです。</p>
+            <ul>
+              <li>3時間ごとにエージェントが集めて分類（約4万件）</li>
+              <li>週に1回、別のエージェントが採点してレポートに</li>
+              <li>止まったら GitHub Actions が見つけて、Issue で知らせる</li>
+            </ul>
+            <p class="tech">Claude Code · Ruby · GitHub Actions</p>
+          </article>
+        </section>
+
+        <section class="chapter" id="principles" data-chapter="3" data-plate="屋根のかたちの羽">
+          <div class="orn" aria-hidden="true"></div>
+          <p class="cap">第 <span class="r">III</span> 章</p>
+          <h2>大事にしていること</h2>
+          <ol class="numbered">
+            <li><h3>使う人の困りごとから考える</h3><p>作る前に「何に困っていて、何があれば楽になるか」を一緒に整理します。</p></li>
+            <li><h3>止めないための決まりを作る</h3><p>大きなテーブルを変えるときの決まりをチームで作り、デプロイ中もサービスを止めないように運用しています。</p></li>
+            <li><h3>軽いテストで長く守る</h3><p>実際の操作に沿ったテストが中心。ブラウザで操作したログから、AIにテストを書かせる流れもチームで整えました。</p></li>
+            <li><h3>コメントには「なぜ」を書く</h3><p>次に読む人が、同じ判断をできるように。</p></li>
+          </ol>
+        </section>
+
+        <section class="chapter" id="skills" data-chapter="4" data-plate="下から見上げる">
+          <div class="orn" aria-hidden="true"></div>
+          <p class="cap">第 <span class="r">IV</span> 章</p>
+          <h2>技能</h2>
+          <h3 class="sub-h">主力</h3>
+          <ul class="leaders">
+            <li><span>Ruby on Rails</span><i></i><span><b data-years="2022-04">4</b> 年</span></li>
+            <li><span>PHP / Laravel</span><i></i><span>約 5 年</span></li>
+            <li><span>MySQL</span><i></i><span><b data-years="2019-04">7</b> 年</span></li>
+            <li><span>要件定義・設計</span><i></i><span>PM兼プログラマー</span></li>
+          </ul>
+          <h3 class="sub-h">実務で使ったもの</h3>
+          <p class="list">
+            React · TypeScript · JavaScript · Hotwire（Turbo・Stimulus） · ViewComponent · HAML · Sass · CakePHP · RSpec · ClickHouse · PostgreSQL · Snowflake · OpenAI API ·
+            Playwright（PDF生成） · Mapbox · Google Maps · 外部API連携* · 印刷・帳票レイアウト · AWS（S3・SES・ECS・Step Functions・CloudWatch） · Docker · Nginx · k6（負荷テスト） · Claude Code ·
+            AIエージェントの定期実行<sup>†</sup> · Node.js<sup>†</sup> · Google Workspace 連携<sup>†</sup>
+          </p>
+          <h3 class="sub-h">触れた程度</h3>
+          <p class="list faint">Vue · Angular · C · C# · VBA</p>
+          <p class="footnote">* e-Stat・不動産情報ライブラリ・Google Sheets・Chatwork・Slack・Salesforce・LINE など　† 個人開発で使用</p>
+        </section>
+
+        <section class="chapter" id="history" data-chapter="5" data-plate="裏側">
+          <div class="orn" aria-hidden="true"></div>
+          <p class="cap">第 <span class="r">V</span> 章</p>
+          <h2>来歴</h2>
+          <ol class="annals">
+            <li><time>1993</time><div><h3>静岡県に生まれる</h3><p>身の回りの物を分解しては怒られる子どもでした。</p></div></li>
+            <li><time>2012</time><div><h3>石川県の理系大学</h3><p>電気電子・機械・物理・プログラミングを学ぶ。当時はブラインドタッチもできず、留年も経験。</p></div></li>
+            <li><time>2018</time><div><h3>ロボット開発企業</h3><p>開発部に所属。VBA でプログラミングの面白さに目覚め、IT業界へ。</p></div></li>
+            <li><time>2019</time><div><h3>受託開発企業</h3><p>Laravel・CakePHP で受託開発。1年足らずでチームリーダーに。</p></div></li>
+            <li><time>2020</time><div><h3>フリーランスとして独立</h3><p>家族のことをきっかけに働き方を見直し、独立。</p></div></li>
+            <li><time>2021</time><div><h3>一括査定システムの開発</h3><p>今も続くお客さまとのお付き合いが、ここから始まる。一般向けのマンションサイトも担当。</p></div></li>
+            <li><time>2024</time><div><h3>不動産会社向けSaaSの開発</h3><p>事例検索・査定書・仕入れ判断ツールなど。今も継続中。</p></div></li>
+          </ol>
+        </section>
+
+        <section class="chapter" id="about" data-chapter="6" data-plate="休む">
+          <div class="orn" aria-hidden="true"></div>
+          <p class="cap">第 <span class="r">VI</span> 章</p>
+          <h2>人となり</h2>
+          <ul class="fleurons">
+            <li><b>ギター歴 <span data-years="2011-04">15</span> 年。</b>友人の結婚式で、緊張で吐きそうになりながら自作曲を披露しました。</li>
+            <li><b>分解が好き。</b>仕組みを知りたくなる性分は、子どもの頃から変わりません。</li>
+            <li><b>エンジニアになった理由は「何かかっこいいから」。</b>今もそう思っています。</li>
+            <li><b>ゲームが好き。</b>あと、デスクワークの宿敵・腰痛と格闘中です。</li>
+          </ul>
+        </section>
+
+        <section class="chapter last" id="contact" data-chapter="7" data-plate="満ちる光">
+          <div class="orn" aria-hidden="true"></div>
+          <p class="cap">第 <span class="r">VII</span> 章</p>
+          <h2>便り</h2>
+          <p class="opening">お仕事のご相談は、メールでどうぞ。エージェントの方・ご紹介の方も、Mitz までお気軽に。</p>
+          <p class="actions center"><a class="btn rubric mail" href="mailto:utsugi.mitsunori@gmail.com">utsugi.mitsunori@gmail.com</a></p>
+
+          <footer class="colophon">
+            <p class="cap">奥付</p>
+            <dl>
+              <div><dt>著者</dt><dd>Mitz（Utsugi Mitsunori）/ semi-program</dd></div>
+              <div><dt>組版</dt><dd>Shippori Mincho B1 · Cormorant Garamond</dd></div>
+              <div><dt>図版</dt><dd>ロゴの骨組みを three.js で立体に</dd></div>
+            </dl>
+            <p class="copy">© <span class="year">2026</span> semi-program</p>
+          </footer>
+        </section>
+        <i class="corner bl" aria-hidden="true"></i><i class="corner br" aria-hidden="true"></i>
+      </main>
+
+      <!-- 右のページ: 紋章の図版。スマホでは右下の小さな印になる -->
+      <aside class="page page-right" aria-hidden="true">
+        <div class="plate">
+          <div class="frame">
+            <i class="fc tl"></i><i class="fc tr"></i><i class="fc bl"></i><i class="fc br"></i>
+            <canvas id="sigil"></canvas>
+            <span class="logo fallback"></span>
+          </div>
+          <p class="caption">
+            <span class="pl">図版 <span id="plate-no">I</span></span>
+            <span class="pt" id="plate-title">点と線の写し</span>
+          </p>
+          <p class="hint">ドラッグで回せます</p>
         </div>
-      </header>
-
-      <div id="fh5co-about">
-        <div class="container">
-          <div class="row animate-box">
-            <div class="col-12 text-center fh5co-heading">
-              <h2>About Me</h2>
-            </div>
-          </div>
-          <div class="row animate-box">
-            <div class="col text-center">
-              <p>静岡県出身のフリーランスプログラマー。</p>
-              <p>
-                受託開発企業に勤め、「見積作成」「仕様策定」「設計」「実装」「運用」まで一連の流れを経験する。
-              </p>
-              <p>
-                技術面ではインフラからフロントエンドまで幅広く経験してきました。
-              </p>
-              <p>
-                経験上、システムを俯瞰してプログラムに落とし込む事が得意です。
-              </p>
-              <p>
-                ロマンの欲求を抑え、使用者全てが使いやすいシステムの制作を目指します。
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="fh5co-history" class="fh5co-bg-color">
-        <div class="container">
-          <div class="row animate-box">
-            <div class="col-12 text-center fh5co-heading">
-              <h2>My History</h2>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 col-md-offset-0">
-              <ul class="timeline">
-                <li class="timeline-heading text-center animate-box">
-                  <div>
-                    <h3>Education</h3>
-                  </div>
-                </li>
-                <li class="animate-box timeline-unverted">
-                  <div class="timeline-badge">
-                    <i class="fa-solid fa-cake-candles"></i>
-                  </div>
-                  <div class="timeline-panel">
-                    <div class="timeline-heading">
-                      <h3 class="timeline-title">誕生</h3>
-                      <span class="company">1993</span>
-                    </div>
-                    <div class="timeline-body">
-                      <p>静岡県の一般家庭に生まれる。好きなことはゲーム。</p>
-                      <p>
-                        好奇心旺盛ゆえ、身の回りの物を分解して怒られる日々。
-                      </p>
-                    </div>
-                  </div>
-                </li>
-                <li class="timeline-inverted animate-box">
-                  <div class="timeline-badge">
-                    <i class="fa-solid fa-guitar"></i>
-                  </div>
-                  <div class="timeline-panel">
-                    <div class="timeline-heading">
-                      <h3 class="timeline-title">音楽</h3>
-                      <span class="company">
-                        2011 - <span class="today"></span>
-                      </span>
-                    </div>
-                    <div class="timeline-body">
-                      <p>ふと楽器屋に寄り、アコースティックギターを購入。</p>
-                      <p>それ以来音楽を趣味にする。</p>
-                      <p>
-                        後に、音楽家の友人の結婚式で緊張のあまり吐きそうになりながら自作曲を披露する。
-                      </p>
-                    </div>
-                  </div>
-                </li>
-                <li class="animate-box timeline-unverted">
-                  <div class="timeline-badge">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                  </div>
-                  <div class="timeline-panel">
-                    <div class="timeline-heading">
-                      <h3 class="timeline-title">大学</h3>
-                      <span class="company"
-                        >石川県の理系大学 - 2012 - 2017</span
-                      >
-                    </div>
-                    <div class="timeline-body">
-                      <p>
-                        「電気電子工学」「機械工学」「物理学」「プログラミング」etc...。
-                      </p>
-                      <p>
-                        幅広く学ぶが、プログラミングは不得意どころかブラインドタイプすらできない始末。
-                      </p>
-                      <p>何なら、留年もする。</p>
-                    </div>
-                  </div>
-                </li>
-                <br />
-                <li class="timeline-heading text-center animate-box">
-                  <div>
-                    <h3>Works</h3>
-                  </div>
-                </li>
-                <li class="timeline-inverted animate-box">
-                  <div class="timeline-badge">
-                    <i class="fas fa-building"></i>
-                  </div>
-                  <div class="timeline-panel">
-                    <div class="timeline-heading">
-                      <h3 class="timeline-title">ロボット開発企業</h3>
-                      <span class="company">2018 - 2019</span>
-                    </div>
-                    <div class="timeline-body">
-                      <p>地元企業に就職。</p>
-                      <p>理系の花形である開発部に就職するが、１年で転職。</p>
-                      <p>
-                        VBAをきっかけにプログラミングの楽しさ、将来性を感じてIT業界への転職を決意。
-                      </p>
-                      <p>一番の転職理由は「何かかっこいいから」。</p>
-                    </div>
-                  </div>
-                </li>
-                <li class="animate-box timeline-unverted">
-                  <div class="timeline-badge">
-                    <i class="fas fa-building"></i>
-                  </div>
-                  <div class="timeline-panel">
-                    <div class="timeline-heading">
-                      <h3 class="timeline-title">受託開発企業</h3>
-                      <span class="company">2019 - 2020</span>
-                    </div>
-                    <div class="timeline-body">
-                      <p>約2年、プログラマーとして従事。</p>
-                      <p>
-                        「見積～運用」まで幅広く経験する。１年たらずでチームリーダーになるほど精力的に業務をこなす。
-                      </p>
-                      <p>
-                        充実した仕事に充実の毎日だったが、母の死をきっかけにフリーランスへ転向。
-                      </p>
-                      <p>
-                        いろいろと理由はあるが、一番の理由は「何かかっこいいから」。
-                      </p>
-                    </div>
-                  </div>
-                </li>
-                <br />
-                <li class="timeline-heading text-center animate-box">
-                  <div>
-                    <h3>Now</h3>
-                  </div>
-                </li>
-                <li class="timeline-inverted animate-box">
-                  <div class="timeline-badge">
-                    <i class="fa-solid fa-code"></i>
-                  </div>
-                  <div class="timeline-panel">
-                    <div class="timeline-heading">
-                      <h3 class="timeline-title">フリーランス</h3>
-                      <span class="company"
-                        >2020 - <span class="today"></span
-                      ></span>
-                    </div>
-                    <div class="timeline-body">
-                      <p>
-                        デスクワークの弊害の腰痛と格闘しながら、プログラムと戯れる。
-                      </p>
-                      <p>
-                        人づてに仕事を頂き、充実した日々を過ごさせて頂いております。
-                      </p>
-                      <p>
-                        モットーは「プログラムは道具。使うのは人。人のためのプログラムを」。
-                      </p>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="fh5co-features">
-        <div class="container">
-          <div class="services-padding">
-            <div class="row animate-box">
-              <div class="col-12 text-center fh5co-heading">
-                <h2>My Features</h2>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4 text-center">
-                <div class="feature-left animate-box">
-                  <span class="icon">
-                    <i class="fa-solid fa-pencil"></i>
-                  </span>
-                  <div class="feature-copy">
-                    <h3>設計</h3>
-                    <p>
-                      基礎設計、詳細設計をお任せください。<br />
-                      未来を見据え、プログラム的にもシステム的にも拡張性の高い設計を目指します。
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4 text-center">
-                <div class="feature-left animate-box">
-                  <span class="icon">
-                    <i class="fa-solid fa-user-check"></i>
-                  </span>
-                  <div class="feature-copy">
-                    <h3>仕様</h3>
-                    <p>
-                      仕様策定をお任せください。<br />
-                      ユーザーにとって使いやすく、バグの出にくい仕様を目指します。
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 text-center">
-                <div class="feature-left animate-box">
-                  <span class="icon">
-                    <i class="fa-solid fa-file-signature"></i>
-                  </span>
-                  <div class="feature-copy">
-                    <h3>見積り</h3>
-                    <p>
-                      お見積りをお任せください。<br />
-                      工数ベースにお見積りを作成いたします。同時にスケジューリングも致します。
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-4 text-center">
-                <div class="feature-left animate-box">
-                  <span class="icon">
-                    <i class="fa-solid fa-code"></i>
-                  </span>
-                  <div class="feature-copy">
-                    <h3>webフロントエンド</h3>
-                    <p>
-                      SPAをお任せください。<br />
-                      React、Vue、Angularによるユーザーの使いやすいUI/UXを目指します。
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4 text-center">
-                <div class="feature-left animate-box">
-                  <span class="icon">
-                    <i class="fa-solid fa-database"></i>
-                  </span>
-                  <div class="feature-copy">
-                    <h3>Web バックエンド</h3>
-                    <p>
-                      複雑な処理をお任せください。<br />
-                      UXを損なう事なく、セキュリティ性の高いシステムを目指します。
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 text-center">
-                <div class="feature-left animate-box">
-                  <span class="icon">
-                    <i class="fa-solid fa-face-laugh-squint"></i>
-                  </span>
-                  <div class="feature-copy">
-                    <h3>挑戦を</h3>
-                    <p>
-                      新しいことをお任せください。<br />
-                      最新の技術、未踏の仕組み、経験の無いことも持ち前の好奇心で解決致します。
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="fh5co-skills">
-        <div class="container">
-          <div class="row animate-box">
-            <div class="col-12 text-center fh5co-heading">
-              <h2>Skills</h2>
-            </div>
-          </div>
-          <div class="row animate-box m-5">
-            <div class="col text-center">
-              <h4>評価基準</h4>
-              <p>1:実務 or 独学 3カ月以下使用。軽く使用した程度</p>
-              <p>
-                2:実務で半年以上使用。実用レベルではあるが、習熟はしていない
-              </p>
-              <p>3:実務で1年以上使用。実用レベル。</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-4 col-xs-12 animate-box">
-              <div id="front-end"></div>
-            </div>
-            <div class="col-sm-4 col-xs-12 animate-box">
-              <div id="back-end"></div>
-            </div>
-            <div class="col-sm-4 col-xs-12 animate-box">
-              <div id="infrastructure"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- <div id="fh5co-work" class="fh5co-bg-dark">
-                <div class="container">
-                    <div class="row animate-box">
-                        <div class="col-12 text-center fh5co-heading">
-                            <h2>Works</h2>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 text-center col-padding animate-box">
-                            <div class="work" style="background-image: url(images/portfolio-2.jpg);"
-                                data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <div class="desc">
-                                    <h3>Project Name</h3>
-                                    <span>Brading</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ここに本文
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-      <div id="fh5co-started" class="fh5co-bg-dark">
-        <div class="overlay"></div>
-        <div class="container">
-          <div class="row">
-            <div class="col-12 text-center fh5co-heading">
-              <h2>仕事のご依頼</h2>
-              <p>当サイトをご覧いただき、ありがとうございます。</p>
-              <p>ご依頼は下記メールからご相談下さい。</p>
-              <p>
-                <a
-                  href="mailto:utsugi.mitsunori@gmail.com"
-                  class="btn btn-default btn-lg"
-                >
-                  utsugi.mitsunori@gmail.com
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      </aside>
     </div>
 
-    <footer class="footer" id="fh5co-footer">
-      <div class="container">
-        <p class="text-muted">
-          <i class="fa-solid fa-copyright"></i>
-          <span class="today"></span> - Utsugi Mitsunori
-        </p>
-      </div>
-    </footer>
-
-    <!-- jQuery -->
-    <script
-      src="https://code.jquery.com/jquery-2.2.4.min.js"
-      integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-      crossorigin="anonymous"
-    ></script>
-    <!-- Bootstrap 5 -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
-    <!-- Waypoints -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.js"
-      integrity="sha512-ZKNVEa7gi0Dz4Rq9jXcySgcPiK+5f01CqW+ZoKLLKr9VMXuCsw3RjWiv8ZpIOa0hxO79np7Ec8DDWALM0bDOaQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <!-- Stellar Parallax -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/stellar.js/0.6.2/jquery.stellar.min.js"
-      integrity="sha512-PNXCBnFH9wShbV+mYnrfo0Gf3iSREgBWmYAoMIfc+Z83vVq3Nu4yxBk6j+BZ40ZIhtW3WlTQdBvW3AYLAnlgpA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <!-- chart js -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
-    <script src="https://unpkg.com/rough-viz@1.0.6"></script>
-
-    <!-- Main -->
-    <script src="js/main.js"></script>
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
