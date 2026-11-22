@@ -24,7 +24,8 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
 const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
-camera.position.set(0, 0, 5.4);
+// 紋章が描く範囲いっぱいに大きく見えるよう寄せる（回したり傾けたりしてもはみ出さない近さ）
+camera.position.set(0, 0, 4.75);
 const key = new THREE.DirectionalLight(0xfff0d0, 1.4);
 key.position.set(2.5, 3, 4);
 scene.add(key);

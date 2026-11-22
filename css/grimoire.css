@@ -302,8 +302,8 @@ html.leaving body { opacity: 0; transition: opacity .35s ease; }
    ページをめくる本（grimoire.js が html.paged を付け、本文をページに割り付ける）
    JS が動かないときは、ここより上の「縦に読む本」のまま
    ========================================================== */
-html.paged { --pad-t: 62px; --pad-b: 72px; --pad-x: clamp(40px, 4.4vw, 72px); --logo: 104px; }
-html.paged[data-mode="single"] { --pad-t: 44px; --pad-b: 50px; --pad-x: clamp(20px, 5.6vw, 52px); --logo: 56px; }
+html.paged { --pad-t: 62px; --pad-b: 72px; --pad-x: clamp(40px, 4.4vw, 72px); --logo-w: 160px; --logo-h: 256px; --float: 9px; }
+html.paged[data-mode="single"] { --pad-t: 44px; --pad-b: 50px; --pad-x: clamp(20px, 5.6vw, 52px); --logo-w: 100px; --logo-h: 100px; --float: 5px; }
 html.paged, html.paged body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 /* 書体が届くまで、本は伏せておく */
 html.paging .book, html.paging .deskbar { opacity: 0; }
@@ -477,23 +477,44 @@ html.paged .annals li { padding: 12px 0; }
 html.paged .actions.center { margin-top: 24px; }
 html.paged .colophon { margin-top: 40px; }
 
-/* ---------- 右上に浮かぶ紋章。押すと目次へ、ドラッグで回る ---------- */
+/* ---------- 右上に浮かぶ紋章。押すと目次へ、ドラッグで回る ----------
+   大きさは grimoire.js が画面に合わせて --logo-w / --logo-h に書く（本の右上にかぶってよいが、本文には重ねない）。
+   ふわふわ: 上下の浮き沈み（.plate）、左右の漂いと傾き（.frame）を、周期をずらして重ねる。
+   下に落ちる影（::before）は浮き沈みに合わせ、高く浮くほど小さく薄くなる */
 html.paged .page-right {
-  position: fixed; z-index: 30; top: 12px; right: 14px; width: var(--logo); height: var(--logo);
+  position: fixed; z-index: 30; top: 10px; right: 14px; width: var(--logo-w); height: var(--logo-h);
   display: block; background: none;
 }
 html.paged .page-right::after { display: none; }
-html.paged .plate {
-  position: static; width: 100%; height: 100%; padding: 0;
-  perspective: none; transform: none !important; transition: none;
-  animation: sigil-float 7s ease-in-out infinite;
+html.paged .page-right::before {
+  content: ""; position: absolute; left: 24%; right: 24%; bottom: 2%; height: 9%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(24, 14, 4, .5), rgba(24, 14, 4, 0));
+  filter: blur(2px);
+  animation: sigil-shadow 6.4s ease-in-out infinite;
 }
-@keyframes sigil-float { 50% { translate: 0 -5px; } }
-html.paged .frame { width: 100%; height: 100%; border: 0; border-radius: 0; box-shadow: none !important; background: none !important; }
+html.paged .plate {
+  position: relative; inset: auto; width: 100%; height: 100%; padding: 0;
+  perspective: none; transform: none !important; transition: none;
+  animation: sigil-bob 6.4s ease-in-out infinite;
+}
+html.paged .frame {
+  width: 100%; height: 100%; border: 0; border-radius: 0; box-shadow: none !important; background: none !important;
+  animation: sigil-drift 9.7s ease-in-out infinite;
+}
+@keyframes sigil-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 calc(var(--float) * -1); } }
+@keyframes sigil-shadow { 0%, 100% { scale: 1; opacity: .9; } 50% { scale: .78; opacity: .5; } }
+@keyframes sigil-drift {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  30% { translate: 3px 1px; rotate: 1.6deg; }
+  65% { translate: -3px -1px; rotate: -1.8deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.paged .plate, html.paged .frame, html.paged .page-right::before { animation: none; }
+}
 html.paged .frame::after, html.paged .fc, html.paged .caption, html.paged .plate .hint { display: none; }
 html.paged #sigil { cursor: pointer; filter: drop-shadow(0 8px 16px rgba(0, 0, 0, .55)) drop-shadow(0 0 14px rgba(196, 154, 69, .22)); }
 html.paged .plate.can-drag #sigil { cursor: grab; }
-html.paged[data-mode="single"] .page-right { top: 6px; right: 8px; }
+html.paged[data-mode="single"] .page-right { top: calc(2px + env(safe-area-inset-top, 0px)); right: calc(4px + env(safe-area-inset-right, 0px)); }
 html.paged[data-mode="single"] #sigil { filter: drop-shadow(0 3px 6px rgba(60, 38, 14, .35)); }
 
 /* ---------- 机の上の道具: ページの送り・番号と、世界の切り替え ---------- */

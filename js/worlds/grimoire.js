@@ -206,25 +206,62 @@ function safeArea() {
   return safeCache;
 }
 
-// ページの大きさを決める。紋章は右上の机の上に置くので、見開きの左右にはその分の余白を取る
+// ページの大きさと、右上に浮かぶ紋章の大きさを決める
 function measure() {
   const vw = window.innerWidth, vh = window.innerHeight;
   mode = vw >= 1100 && vh >= 560 ? "spread" : "single";
+  // 紋章の描く範囲は、セミの形（縦長）に合わせて縦長にする。幅は本文にかからない大きさ、高さは幅の 1.6 倍
+  const TALL = 1.6;
+  let logoW, logoH, padT = 0;
   if (mode === "spread") {
-    const logo = 104, gutter = logo + 28;
+    // 見開きの左右の余白（ページの大きさはこれで決まる。変えると割り付けがすべて変わるので据え置き）
+    const gutter = 132;
     PH = vh - 22 - 62;
     PW = Math.floor(Math.min((vw - gutter * 2) / 2, 680, PH * 0.82));
     html.style.setProperty("--book-top", "22px");
+    // 紋章は本の右上の角にかぶせてよい。ただし右ページの本文には重ならない大きさまで
+    const padX = Math.min(72, Math.max(40, vw * 0.044));
+    const textRight = vw / 2 + PW - padX;
+    logoW = Math.round(Math.max(120, Math.min(210, vw * 0.13, vw - 14 - textRight - 6)));
+    logoH = Math.round(logoW * TALL);
   } else {
     // 1ページずつのときも、開いた本の右ページとして見せる。
     // 上はページ送りと紋章、下は世界の切り替えの場所を空け、左に向かいのページのはし（SLIVER）、右に紙の重なりと表紙（EDGE）
     const SLIVER = 12, EDGE = 16, safe = safeArea();
-    const top = 52 + safe.top, bottom = 66 + safe.bottom;
-    PH = vh - top - bottom;
-    PW = Math.min(vw - SLIVER - EDGE, Math.max(Math.round(PH * 0.78), 520));
+    const bottom = 66 + safe.bottom;
+    const fit = (top) => {
+      PH = vh - top - bottom;
+      PW = Math.min(vw - SLIVER - EDGE, Math.max(Math.round(PH * 0.78), 520));
+      return (vw - PW) / 2;
+    };
+    let top = 52 + safe.top;
+    const side = fit(top);
+    if (side > 150) {
+      // 机が横に見えている画面（iPad の横向きなど）は、机の上に大きく縦長に
+      logoW = Math.round(Math.min(170, side - 40));
+      logoH = Math.round(logoW * TALL);
+    } else {
+      // スマホなど、紋章がページの右上に重なって浮く画面。紋章は大きく縦長にし、
+      // 本文は紋章の下から始まるよう、ページの上の余白を広げる（とても低い画面は、ページの高さを優先して控えめに）
+      const roomy = vh >= 700;
+      if (roomy) {
+        logoW = 96;
+        logoH = 144;
+        top = 62 + safe.top;
+        fit(top);
+      } else {
+        logoW = logoH = 92;
+      }
+      // 紋章の下端（画面の上から 2px + 高さ）より 4px 下から本文が始まるように
+      padT = Math.max(44, Math.ceil(2 + safe.top + logoH + 4 - top));
+    }
     html.style.setProperty("--book-top", top + "px");
     html.style.setProperty("--book-left", Math.round((vw - PW - EDGE + SLIVER) / 2) + "px");
   }
+  if (padT) html.style.setProperty("--pad-t", padT + "px");
+  else html.style.removeProperty("--pad-t");
+  html.style.setProperty("--logo-w", logoW + "px");
+  html.style.setProperty("--logo-h", logoH + "px");
   html.dataset.mode = mode;
   html.style.setProperty("--pw", PW + "px");
   html.style.setProperty("--ph", PH + "px");
